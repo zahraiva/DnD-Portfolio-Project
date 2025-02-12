@@ -1,0 +1,286 @@
+:root {
+    --primary-color: #2E7D32;
+    --secondary-color: #4CAF50;
+    --accent-color: #81C784;
+    --background-color: #E8F5E9;
+    --text-color: #1B5E20;
+    --error-color: #c62828;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    width: 100vw; /* Ensures it covers the full width */
+    background-image: url('images/background.jpg'); /* Ensure correct file format */
+    background-size: cover; /* Ensures it stretches to cover the whole screen */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents tiling */
+    overflow: hidden; /* Hides scrollbars if content exceeds */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* body {
+    min-height: 100vh;
+    background-color: #1a3320;
+    background-image: 
+        /* Magical sparkles */
+        radial-gradient(circle at 50% 50%, rgba(129, 199, 132, 0.1) 2px, transparent 4px),
+        radial-gradient(circle at 20% 20%, rgba(129, 199, 132, 0.05) 1px, transparent 3px),
+        radial-gradient(circle at 80% 80%, rgba(129, 199, 132, 0.05) 1px, transparent 3px),
+        /* Mystical forest pattern */
+        repeating-linear-gradient(45deg, 
+            rgba(46, 125, 50, 0.1) 0px,
+            rgba(46, 125, 50, 0.1) 2px,
+            transparent 2px,
+            transparent 4px
+        ),
+        repeating-linear-gradient(-45deg,
+            rgba(46, 125, 50, 0.1) 0px,
+            rgba(46, 125, 50, 0.1) 2px,
+            transparent 2px,
+            transparent 4px
+        ),
+        /* Deep forest background */
+        linear-gradient(
+            135deg,
+            #1a3320 0%,
+            #2a4530 50%,
+            #1a3320 100%
+        );
+    background-size: 
+        100px 100px,
+        120px 120px,
+        150px 150px,
+        20px 20px,
+        20px 20px,
+        100% 100%;
+    background-position: 
+        0 0,
+        40px 40px,
+        -20px -20px,
+        0 0,
+        0 0,
+        0 0;
+    animation: backgroundShimmer 60s linear infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+
+@keyframes backgroundShimmer {
+    0% {
+        background-position: 
+            0 0,
+            40px 40px,
+            -20px -20px,
+            0 0,
+            0 0,
+            0 0;
+    }
+    100% {
+        background-position: 
+            100px 100px,
+            140px 140px,
+            80px 80px,
+            20px 20px,
+            20px 20px,
+            0 0;
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    position: relative;
+}
+
+.form-box {
+    position: relative;
+    height: 550px;
+    transition: transform 0.6s ease-in-out;
+}
+
+.form-box.show-signup {
+    transform: translateX(-100%);
+}
+
+.login-form,
+.signup-form {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    padding: 40px;
+    transition: all 0.6s ease-in-out;
+}
+
+.login-form {
+    left: 0;
+    opacity: 1;
+    z-index: 2;
+}
+
+.signup-form {
+    left: 100%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.form-box.show-signup .login-form {
+    opacity: 0;
+    z-index: 1;
+}
+
+.form-box.show-signup .signup-form {
+    opacity: 1;
+    z-index: 2;
+}
+
+h2 {
+    font-family: 'MedievalSharp', cursive;
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: none;
+    border-bottom: 2px solid var(--primary-color);
+    background: transparent;
+    font-size: 16px;
+    color: var(--text-color);
+    outline: none;
+}
+
+.input-group label {
+    position: absolute;
+    top: 10px;
+    left: 40px;
+    color: var(--text-color);
+    pointer-events: none;
+    transition: 0.3s ease all;
+}
+
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+    top: -20px;
+    font-size: 12px;
+    color: var(--primary-color);
+}
+
+.input-icon {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 20px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-family: 'MedievalSharp', cursive;
+}
+
+.submit-btn:hover {
+    background: var(--secondary-color);
+}
+
+.toggle-text {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--text-color);
+}
+
+.toggle-btn {
+    color: var(--primary-color);
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.toggle-btn:hover {
+    text-decoration: underline;
+}
+
+.role-select {
+    margin: 20px 0;
+}
+
+.role-select h3 {
+    font-family: 'MedievalSharp', cursive;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.role-options {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+}
+
+.role-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.role-option:hover {
+    background: rgba(129, 199, 132, 0.2);
+}
+
+.role-icon {
+    font-size: 24px;
+    margin: 5px 0;
+}
+
+.role-option input[type="radio"] {
+    display: none;
+}
+
+.role-option input[type="radio"]:checked + .role-icon {
+    transform: scale(1.2);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.login-form, .signup-form {
+    animation: fadeIn 0.5s ease-out;
+}
