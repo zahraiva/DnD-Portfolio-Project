@@ -105,12 +105,16 @@ body {
 }
 
 .form-container {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    background: url('images/scroll.png') no-repeat center;
+    background-size: cover;
+
+    /* border-radius: 20px; */
+    /* box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); */
     overflow: hidden;
     position: relative;
+    padding: 30px;
 }
+
 
 .form-box {
     position: relative;
@@ -135,13 +139,20 @@ body {
     left: 0;
     opacity: 1;
     z-index: 2;
+    margin-top: 50px;
 }
+
 
 .signup-form {
     left: 100%;
     opacity: 0;
     z-index: 1;
+    padding: 30px;
+    margin-top: -10px;
+    height: 300px;
+    width: 100%;
 }
+
 
 .form-box.show-signup .login-form {
     opacity: 0;
@@ -152,6 +163,7 @@ body {
     opacity: 1;
     z-index: 2;
 }
+
 
 h2 {
     font-family: 'MedievalSharp', cursive;
