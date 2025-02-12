@@ -15,13 +15,14 @@
 }
 
 body {
+    margin-bottom: -20%;
     min-height: 100vh;
-    width: 100vw; /* Ensures it covers the full width */
-    background-image: url('images/background.jpg'); /* Ensure correct file format */
-    background-size: cover; /* Ensures it stretches to cover the whole screen */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents tiling */
-    overflow: hidden; /* Hides scrollbars if content exceeds */
+    width: 100vw;
+    background-image: url('images/BACK.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
