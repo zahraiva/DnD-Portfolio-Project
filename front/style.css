@@ -1,9 +1,9 @@
 :root {
-    --primary-color: #2E7D32;
+    --primary-color: #114314;
     --secondary-color: #4CAF50;
     --accent-color: #81C784;
     --background-color: #E8F5E9;
-    --text-color: #1B5E20;
+    --text-color: #114314;
     --error-color: #c62828;
 }
 
@@ -27,55 +27,6 @@ body {
     align-items: center;
     justify-content: center;
 }
-
-
-/* body {
-    min-height: 100vh;
-    background-color: #1a3320;
-    background-image: 
-        /* Magical sparkles */
-        radial-gradient(circle at 50% 50%, rgba(129, 199, 132, 0.1) 2px, transparent 4px),
-        radial-gradient(circle at 20% 20%, rgba(129, 199, 132, 0.05) 1px, transparent 3px),
-        radial-gradient(circle at 80% 80%, rgba(129, 199, 132, 0.05) 1px, transparent 3px),
-        /* Mystical forest pattern */
-        repeating-linear-gradient(45deg, 
-            rgba(46, 125, 50, 0.1) 0px,
-            rgba(46, 125, 50, 0.1) 2px,
-            transparent 2px,
-            transparent 4px
-        ),
-        repeating-linear-gradient(-45deg,
-            rgba(46, 125, 50, 0.1) 0px,
-            rgba(46, 125, 50, 0.1) 2px,
-            transparent 2px,
-            transparent 4px
-        ),
-        /* Deep forest background */
-        linear-gradient(
-            135deg,
-            #1a3320 0%,
-            #2a4530 50%,
-            #1a3320 100%
-        );
-    background-size: 
-        100px 100px,
-        120px 120px,
-        150px 150px,
-        20px 20px,
-        20px 20px,
-        100% 100%;
-    background-position: 
-        0 0,
-        40px 40px,
-        -20px -20px,
-        0 0,
-        0 0,
-        0 0;
-    animation: backgroundShimmer 60s linear infinite;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-} */
 
 @keyframes backgroundShimmer {
     0% {
@@ -107,18 +58,14 @@ body {
 .form-container {
     background: url('images/scroll.png') no-repeat center;
     background-size: cover;
-
-    /* border-radius: 20px; */
-    /* box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); */
+    padding: 30px;
     overflow: hidden;
     position: relative;
-    padding: 30px;
 }
-
 
 .form-box {
     position: relative;
-    height: 550px;
+    height: 450px;
     transition: transform 0.6s ease-in-out;
 }
 
@@ -139,20 +86,18 @@ body {
     left: 0;
     opacity: 1;
     z-index: 2;
-    margin-top: 50px;
+    margin-top: 35px;
 }
-
 
 .signup-form {
     left: 100%;
     opacity: 0;
     z-index: 1;
     padding: 30px;
-    margin-top: -10px;
+    margin-top: 36px;
     height: 300px;
     width: 100%;
 }
-
 
 .form-box.show-signup .login-form {
     opacity: 0;
@@ -164,7 +109,6 @@ body {
     z-index: 2;
 }
 
-
 h2 {
     font-family: 'MedievalSharp', cursive;
     color: var(--text-color);
@@ -175,7 +119,7 @@ h2 {
 
 .input-group {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .input-group input {
@@ -243,50 +187,6 @@ h2 {
 
 .toggle-btn:hover {
     text-decoration: underline;
-}
-
-.role-select {
-    margin: 20px 0;
-}
-
-.role-select h3 {
-    font-family: 'MedievalSharp', cursive;
-    color: var(--text-color);
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.role-options {
-    display: flex;
-    justify-content: space-around;
-    gap: 15px;
-}
-
-.role-option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 10px;
-    transition: background 0.3s ease;
-}
-
-.role-option:hover {
-    background: rgba(129, 199, 132, 0.2);
-}
-
-.role-icon {
-    font-size: 24px;
-    margin: 5px 0;
-}
-
-.role-option input[type="radio"] {
-    display: none;
-}
-
-.role-option input[type="radio"]:checked + .role-icon {
-    transform: scale(1.2);
 }
 
 @keyframes fadeIn {
