@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realm of Adventures - D&D</title>
+    <link rel="stylesheet" href="landing.css">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;600;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-dragon"></i>
+                <span>Dungeons & Dragons</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#story"><i class="fas fa-book-open"></i> Story</a></li>
+                <li><a href="#map"><i class="fas fa-map-marked-alt"></i> Map</a></li>
+                <li><a href="#characters"><i class="fas fa-users"></i> Characters</a></li>
+                <li><a href="index.html" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Welcome to the Realm</h1>
+                <p>Embark on an epic journey through magical lands and legendary tales</p>
+                <a href="#story" class="cta-button">Begin Your Adventure</a>
+            </div>
+        </section>
+
+        <section id="story" class="story-section">
+            <div class="section-content">
+                <h2>Epic Tales Await</h2>
+                <div class="story-cards">
+                    <div class="story-card">
+                        <i class="fas fa-crown"></i>
+                        <h3>The Lost Kingdom</h3>
+                        <p>Discover the mysteries of an ancient realm lost to time.</p>
+                    </div>
+                    <div class="story-card">
+                        <i class="fas fa-dragon"></i>
+                        <h3>Dragon's Legacy</h3>
+                        <p>Face legendary creatures in epic battles.</p>
+                    </div>
+                    <div class="story-card">
+                        <i class="fas fa-magic"></i>
+                        <h3>Magical Realms</h3>
+                        <p>Explore lands filled with powerful magic and ancient secrets.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="map" class="map-section">
+            <div class="section-content">
+                <h2>Explore the Lands</h2>
+                <div class="map-container">
+                    <div class="map-preview">
+                        <i class="fas fa-compass"></i>
+                        <h3>Interactive World Map</h3>
+                        <p>Navigate through mysterious forests, treacherous mountains, and magical cities.</p>
+                        <button class="map-button">Open World Map</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="characters" class="characters-section">
+            <div class="section-content">
+                <h2>Meet the Heroes</h2>
+                <div class="character-cards">
+                    <div class="character-card">
+                        <div class="character-icon"><i class="fas fa-hat-wizard"></i></div>
+                        <h3>Wizards</h3>
+                        <p>Masters of arcane magic</p>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-icon"><i class="fas fa-shield-alt"></i></div>
+                        <h3>Warriors</h3>
+                        <p>Brave defenders of the realm</p>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-icon"><i class="fas fa-bow-arrow"></i></div>
+                        <h3>Rangers</h3>
+                        <p>Skilled hunters and trackers</p>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-icon"><i class="fas fa-skull"></i></div>
+                        <h3>Rogues</h3>
+                        <p>Masters of stealth and cunning</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About Us</h4>
+                <p>Join our community of adventurers and create unforgettable stories together.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#story">Story</a></li>
+                    <li><a href="#map">Map</a></li>
+                    <li><a href="#characters">Characters</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-reddit"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Realm of Adventures. All rights reserved.</p>
+        </div>
+    </footer>
+    <script>
+        // Get all sections and navigation links
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        // Function to update active link
+        function updateActiveLink() {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Update active link on scroll
+        window.addEventListener('scroll', updateActiveLink);
+
+        // Smooth scroll and update active link on click
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (!this.classList.contains('login-btn')) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+
+                    // Update active class
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Set active link on page load
+        updateActiveLink();
+    </script>
+</body>
+</html>
