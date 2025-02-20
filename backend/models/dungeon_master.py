@@ -5,9 +5,10 @@ from backend.models.basemodel import BaseModel
 class DungeonMaster(BaseModel):
     __tablename__ = "dungeon_master"
 
-    username = Column(String, unique=True, index=True)
-    email = Column(String, unique=True, index=True)
-    password = Column(String)
-    is_admin = Column(Boolean, default=False)
+    username = Column(String(100), unique=True, index=True)
+    email = Column(String(100), unique=True, index=True)
+    password = Column(String(100), nullable=False)
+    is_admin = Column(Boolean, default=False, nullable=False)
 
-    game_sessions = relationship("GameSession", back_populates="dungeon_master")
+    character = relationship("Character", back_populates="dungeon_master")
+    story = relationship("Story", back_populates='dungeon_master')
