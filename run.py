@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend.api.auth import router as dungeon_router
+from backend.api.v1.auth import router as dungeon_router
 from backend.database import engine, Base
 import uvicorn
 
