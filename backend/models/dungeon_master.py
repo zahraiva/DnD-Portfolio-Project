@@ -12,3 +12,4 @@ class DungeonMaster(BaseModel):
 
     character = relationship("Character", back_populates="dungeon_master")
     story = relationship("Story", back_populates='dungeon_master')
+    game_session = relationship("GameSession", back_populates="dungeon_master")
