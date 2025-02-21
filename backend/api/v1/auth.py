@@ -7,11 +7,11 @@ from backend.schemas.auth import SignupRequest, LoginRequest, SignupResponse, Lo
 router = APIRouter()
 
 @router.post("/signup", response_model=SignupResponse)
-def signup(data: SignupRequest, db: Session = Depends(get_db)):
+async def signup(data: SignupRequest, db: Session = Depends(get_db)):
     user_facade = DungeonMasterFacade(db)
-    return user_facade.signup(data)
+    return await user_facade.signup(data)
 
 @router.post("/login", response_model=LoginResponse)
-def login(data: LoginRequest, db: Session = Depends(get_db)):
+async def login(data: LoginRequest, db: Session = Depends(get_db)):
     user_facade = DungeonMasterFacade(db)
-    return user_facade.login(data)
+    return await user_facade.login(data)

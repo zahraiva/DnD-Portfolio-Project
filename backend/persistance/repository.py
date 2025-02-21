@@ -1,65 +1,74 @@
 from backend.models import Character, DungeonMaster
 from abc import ABC, abstractmethod
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+
 
 class BaseRepository(ABC):
     @abstractmethod
-    def create(self, db: Session, model, **kwargs):
+    async def create(self, db: AsyncSession, model, **kwargs):
         pass
 
     @abstractmethod
-    def get_by_id(self, db: Session, model, object_id: str):
+    async def get_by_id(self, db: AsyncSession, model, object_id: str):
         pass
 
     @abstractmethod
-    def update(self, db: Session, model, object_id: str, **kwargs):
+    async def update(self, db: AsyncSession, model, object_id: str, **kwargs):
         pass
 
     @abstractmethod
-    def delete(self, db: Session, model, object_id: str):
+    async def delete(self, db: AsyncSession, model, object_id: str):
         pass
 
 
 class DungeonMasterRepository(BaseRepository):
-    def create(self, db: Session, model, **kwargs):
+    async def create(self, db: AsyncSession, model, **kwargs):
         obj = model(**kwargs)
         db.add(obj)
-        db.commit()
-        db.refresh(obj)
+        await db.commit()
+        await db.refresh(obj)
         return obj
 
-    def get_by_id(self, db: Session, model, object_id: str):
-        return db.query(model).filter(model.id == object_id).first()
+    async def get_by_id(self, db: AsyncSession, model, object_id: str):
+        result = await db.execute(select(model).where(model.id == object_id))
+        return result.scalars().first()
 
-    def update(self, db: Session, model, object_id: str, **kwargs):
-        db_obj = db.query(model).filter(model.id == object_id).first()
+    async def update(self, db: AsyncSession, model, object_id: str, **kwargs):
+        result = await db.execute(select(model).where(model.id == object_id))
+        db_obj = result.scalars().first()
+
         if db_obj:
             for key, value in kwargs.items():
                 setattr(db_obj, key, value)
-            db.commit()
-            db.refresh(db_obj)
+            await db.commit()
+            await db.refresh(db_obj)
             return db_obj
         return None
 
-    def delete(self, db: Session, model, object_id: str):
-        db_obj = db.query(model).filter(model.id == object_id).first()
+    async def delete(self, db: AsyncSession, model, object_id: str):
+        result = await db.execute(select(model).where(model.id == object_id))
+        db_obj = result.scalars().first()
+
         if db_obj:
-            db.delete(db_obj)
-            db.commit()
+            await db.delete(db_obj)
+            await db.commit()
             return db_obj
         return None
 
-    def create_character(self, db: Session, dungeon_master_id: str, name: str, race: str, class_type: str):
-        db_dungeon_master = db.query(DungeonMaster).filter(DungeonMaster.id == dungeon_master_id).first()
+    async def create_character(self, db: AsyncSession, dungeon_master_id: str, name: str, race: str, class_type: str):
+        result = await db.execute(select(DungeonMaster).where(DungeonMaster.id == dungeon_master_id))
+        db_dungeon_master = result.scalars().first()
+
         if db_dungeon_master:
-            return self.create(db, Character, name=name, race=race, class_type=class_type)
+            return await self.create(db, Character, name=name, race=race, class_type=class_type)
         return None
 
-    def get_character_by_id(self, db: Session, character_id: str):
-        return self.get_by_id(db, Character, character_id)
+    async def get_character_by_id(self, db: AsyncSession, character_id: str):
+        return await self.get_by_id(db, Character, character_id)
 
-    def update_character(self, db: Session, character_id: str, name: str, race: str, class_type: str):
-        return self.update(db, Character, character_id, name=name, race=race, class_type=class_type)
+    async def update_character(self, db: AsyncSession, character_id: str, name: str, race: str, class_type: str):
+        return await self.update(db, Character, character_id, name=name, race=race, class_type=class_type)
 
-    def delete_character(self, db: Session, character_id: str):
-        return self.delete(db, Character, character_id)
+    async def delete_character(self, db: AsyncSession, character_id: str):
+        return await self.delete(db, Character, character_id)
