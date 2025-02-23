@@ -9,10 +9,6 @@ class LoginResponse(BaseModel):
     access_token: str
     token_type: str
 
-class LoginRequest(BaseModel):
-    username: str
-    password: str
-
 class SignupRequest(BaseModel):
     username: str
     email: str

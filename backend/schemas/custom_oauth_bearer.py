@@ -5,12 +5,13 @@ from backend.utils.token import verify_token, create_access_token
 from backend.database import get_db
 from backend.models.dungeon_master import DungeonMaster
 from datetime import timedelta
+from sqlalchemy import select
 
 http_token = HTTPBearer()
 
 class CustomOAuthBearer:
-    def __init__(self, email: str = Form(...), password: str = Form(...)):
-        self.email = email
+    def __init__(self, username: str = Form(...), password: str = Form(...)):
+        self.username = username
         self.password = password
 
 async def get_token_from_credentials(token: str = Depends(http_token)):
@@ -26,9 +27,9 @@ async def get_current_user(token: str = Depends(get_token_from_credentials), db:
         raise HTTPException(status_code=401, detail=str(e))
 
     result = await db.execute(
-        DungeonMaster.__table__.select().where(DungeonMaster.id == user_id)
+        select(DungeonMaster).where(DungeonMaster.id == user_id)
     )
-    user = result.scalar_one_or_none()
+    user = result.scalars().first()
 
     if not user:
         raise HTTPException(status_code=401, detail="User not found")
