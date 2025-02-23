@@ -5,22 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3de448a3-bcfc-4e20-99b0-9f3fc9242a69" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/DnD-Portfolio-Project.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/api/v1/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/v1/auth.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/api/v1/character.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/v1/character.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/models/character.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/character.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/models/dungeon_master.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/dungeon_master.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/models/game_character.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/game_character.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/persistance/repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/persistance/repository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/schemas/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/schemas/auth.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/schemas/character.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/schemas/character.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/schemas/custom_oauth_bearer.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/schemas/custom_oauth_bearer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/service/facade.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/facade.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/utils/dependencies.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/utils/token.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/token.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

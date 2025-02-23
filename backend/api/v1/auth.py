@@ -1,17 +1,16 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from backend.service.facade import DungeonMasterFacade
+from sqlalchemy.ext.asyncio import AsyncSession
+from backend.service import facades
 from backend.database import get_db
-from backend.schemas.auth import SignupRequest, LoginRequest, SignupResponse, LoginResponse
+from backend.schemas.auth import SignupRequest, SignupResponse, LoginResponse
+from backend.schemas.custom_oauth_bearer import CustomOAuthBearer
 
-router = APIRouter()
+router = APIRouter(tags=["Authentication"])
 
 @router.post("/signup", response_model=SignupResponse)
-async def signup(data: SignupRequest, db: Session = Depends(get_db)):
-    user_facade = DungeonMasterFacade(db)
-    return await user_facade.signup(data)
+async def signup(data: SignupRequest, db: AsyncSession = Depends(get_db)):
+    return await facades.signup(db, data)
 
 @router.post("/login", response_model=LoginResponse)
-async def login(data: LoginRequest, db: Session = Depends(get_db)):
-    user_facade = DungeonMasterFacade(db)
-    return await user_facade.login(data)
+async def login(formdata: CustomOAuthBearer = Depends(), db: AsyncSession = Depends(get_db)):
+    return await facades.login(db, formdata)

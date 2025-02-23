@@ -2,6 +2,7 @@ import asyncio
 from fastapi import FastAPI
 from backend.api.v1.auth import router as dungeon_router
 from backend.api.v1.character import router as character_router
+from backend.api.v1.story import router as story_router
 from backend.database import engine, Base
 import uvicorn
 
@@ -9,6 +10,7 @@ app = FastAPI()
 
 app.include_router(dungeon_router)
 app.include_router(character_router)
+app.include_router(story_router)
 
 async def create_tables():
     async with engine.begin() as conn:
