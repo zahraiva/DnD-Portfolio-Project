@@ -53,8 +53,7 @@ class DungeonMasterRepository(BaseRepository):
         return result.scalars().all()
 
     async def update(self, db: AsyncSession, model, object_id: str, **kwargs):
-        result = await db.execute(select(model).where(model.id == object_id))
-        db_obj = result.scalars().first()
+        db_obj = await self.get(db, model, object_id)
 
         if db_obj:
             for key, value in kwargs.items():
@@ -65,8 +64,7 @@ class DungeonMasterRepository(BaseRepository):
         return None
 
     async def delete(self, db: AsyncSession, model, object_id: str):
-        result = await db.execute(select(model).where(model.id == object_id))
-        db_obj = result.scalars().first()
+        db_obj = await self.get(db, model, object_id)
 
         if db_obj:
             await db.delete(db_obj)
