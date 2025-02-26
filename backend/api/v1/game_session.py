@@ -54,6 +54,22 @@ async def patch_game_session(
     updated_gme_session = await facades.patch_game_session(db, game_session_id, state)
     return updated_gme_session
 
+@router.patch("/game_session/{game_session_id}/complete")
+async def complete_game_session(game_session_id: str, db: AsyncSession = Depends(get_db)):
+    try:
+        game_session = await facades.end_game_session(db, game_session_id)
+        return {"message": "Game session completed", "game_session_id": game_session_id, "state": game_session.state}
+    except HTTPException as e:
+        raise e
+
+@router.get("/game_session/{game_session_id}/completed")
+async def get_completed_game_session(game_session_id: str, db: AsyncSession = Depends(get_db)):
+    try:
+        status = await facades.get_completed_game_session(db, game_session_id)
+        return {"message": "Game session is completed", "game_session_id": game_session_id, "state": status}
+    except HTTPException as e:
+        raise e
+
 @router.put("/game_session/{game_session_id}", response_model=GameSessionResponse)
 async def update_game_session(game_session_id: str, game_session_data: GameSessionUpdate, db: AsyncSession = Depends(get_db), current_user = Depends(get_current_user)):
     updated_game_session = await facades.update_game_session(
