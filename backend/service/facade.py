@@ -105,6 +105,25 @@ class DungeonMasterFacade:
         await db.refresh(game_session)
         return game_session
 
+    async def end_game_session(self, db: AsyncSession, game_session_id: str):
+        game_session = await self.get_game_session(db, game_session_id)
+        if not game_session:
+            raise HTTPException(status_code=404, detail="Game session not found")
+
+        new_state = {"status": "completed"}
+        return await self.patch_game_session(db, game_session_id, new_state)
+
+    async def get_completed_game_session(self, db: AsyncSession, game_session_id: str):
+        game_session = await self.get_game_session(db, game_session_id)
+        if not game_session:
+            raise HTTPException(status_code=404, detail="Game session not found")
+
+        status = game_session.state.get("status")
+        if status == "completed":
+            return status
+        else:
+            raise HTTPException(status_code=400, detail="Game session is not completed")
+
     async def update_game_session(self, db: AsyncSession, game_session_id: str, title: str, story_id: str, state: dict):
         return await self.dungeon_master_repo.update(db, GameSession, game_session_id, title=title, story_id=story_id, state=state)
 
