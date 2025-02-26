@@ -1,6 +1,6 @@
 from backend.persistance.repository import DungeonMasterRepository
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.models import DungeonMaster, Character, Story
+from backend.models import DungeonMaster, Character, Story, GameSession
 from backend.schemas.custom_oauth_bearer import CustomOAuthBearer
 from backend.utils.password import hash_password, verify_password
 from backend.utils.token import create_access_token
@@ -8,6 +8,7 @@ from datetime import timedelta
 from fastapi import HTTPException
 from backend.schemas.auth import SignupResponse, LoginResponse, SignupRequest
 from sqlalchemy.future import select
+from sqlalchemy import update
 
 class DungeonMasterFacade:
     def __init__(self):
@@ -63,6 +64,9 @@ class DungeonMasterFacade:
     async def get_story_by_id(self, db: AsyncSession, story_id):
         return await self.dungeon_master_repo.get(db, Story, story_id)
 
+    async def get_stories_by_dungeon_master(self, db: AsyncSession, dungeon_master_id: str):
+        return await self.dungeon_master_repo.get_all_by_attribute(db, Story, "dungeon_master_id", dungeon_master_id)
+
     async def get_story_by_title(self, db: AsyncSession, title: str):
         return await self.dungeon_master_repo.get_by_attribute(db, Story, "title", title)
 
@@ -74,3 +78,36 @@ class DungeonMasterFacade:
 
     async def delete_story(self, db: AsyncSession, story_id: str):
         return await self.dungeon_master_repo.delete(db, Story, story_id)
+
+    async def create_game_session(self, db: AsyncSession, title: str, dungeon_master_id: str, state: dict, story_id: str):
+        return await self.dungeon_master_repo.create(db, GameSession, title=title, dungeon_master_id=dungeon_master_id, state=state, story_id=story_id)
+
+    async def get_game_session(self, db: AsyncSession, game_session_id: str):
+        return await self.dungeon_master_repo.get(db, GameSession, game_session_id)
+
+    async def get_game_sessions_by_dungeon_master(self, db: AsyncSession, dungeon_master_id: str):
+        return await self.dungeon_master_repo.get_all_by_attribute(db, GameSession, "dungeon_master_id", dungeon_master_id)
+
+    async def patch_game_session(self, db: AsyncSession, game_session_id: str, state: dict):
+        game_session = await self.get_game_session(db, game_session_id)
+        if not game_session:
+            raise HTTPException(status_code=404, detail="Game session not found")
+
+        current_state = game_session.state if game_session.state else {}
+        current_state.update(state)
+        stmt = (
+            update(GameSession)
+            .where(GameSession.id == game_session_id)
+            .values(state=current_state)
+        )
+        await db.execute(stmt)
+        await db.commit()
+        await db.refresh(game_session)
+        return game_session
+
+    async def update_game_session(self, db: AsyncSession, game_session_id: str, title: str, story_id: str, state: dict):
+        return await self.dungeon_master_repo.update(db, GameSession, game_session_id, title=title, story_id=story_id, state=state)
+
+    async def delete_game_session(self, db: AsyncSession, game_session_id: str):
+        return await self.dungeon_master_repo.delete(db, GameSession, game_session_id)
+
