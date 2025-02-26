@@ -74,7 +74,7 @@ async def update_character(
     if not updated_character:
         raise HTTPException(status_code=404, detail="Character not found or not owned by you")
 
-    return {"message": "Character updated successfully", "character": updated_character}
+    return {"message": "Character updated successfully", "Character": updated_character}
 
 @router.delete("/{character_id}")
 async def delete_character(

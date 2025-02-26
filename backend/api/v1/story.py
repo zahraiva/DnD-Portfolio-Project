@@ -44,6 +44,16 @@ async def get_all_stories(db: AsyncSession = Depends(get_db)):
     stories = await facades.get_all_stories(db)
     return stories
 
+@router.get("/get-all-stories/{dungeon_master_id}")
+async def get_stories_by_dungeon_master(
+        dungeon_master_id: str,
+        db: AsyncSession = Depends(get_db)
+):
+    stories = await facades.get_stories_by_dungeon_master(db, dungeon_master_id)
+    if not stories:
+        raise HTTPException(status_code=404, detail="There is no any character belonging to you")
+    return stories
+
 @router.put("/update-story/{story_id}")
 async def update_story(
         story_id: str,
