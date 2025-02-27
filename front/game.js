@@ -48,3 +48,21 @@ createGameBtn.addEventListener('click', () => {
         characterDetailsModal.style.display = 'none';
     }
   }
+
+// Add new character entry
+addCharacterBtn.onclick = () => {
+    const characterEntry = document.createElement('div');
+    characterEntry.className = 'character-entry';
+    characterEntry.innerHTML = `
+        <input type="text" name="characterName" placeholder="Character Name">
+        <select name="characterClass" class="character-class">
+            <option value="">Select Class</option>
+            <option value="warrior">Warrior</option>
+            <option value="mage">Mage</option>
+            <option value="rogue">Rogue</option>
+            <option value="cleric">Cleric</option>
+        </select>
+        <button type="button" class="add-details-btn">Add Skills & Items</button>
+        <button type="button" class="remove-character">×</button>
+    `;
+    charactersList.appendChild(characterEntry);
