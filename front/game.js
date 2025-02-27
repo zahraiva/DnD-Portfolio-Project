@@ -76,3 +76,18 @@ addCharacterBtn.onclick = () => {
   const removeBtn = characterEntry.querySelector('.remove-character');
   removeBtn.onclick = () => characterEntry.remove();
 }
+// Tab switching in character details modal
+tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Remove active class from all buttons
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        button.classList.add('active');
+  
+        // Hide all tab contents
+        tabContents.forEach(content => content.style.display = 'none');
+        // Show selected tab content
+        const tabId = button.getAttribute('data-tab') + 'Tab';
+        document.getElementById(tabId).style.display = 'block';
+    });
+  });
