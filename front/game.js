@@ -91,3 +91,29 @@ tabButtons.forEach(button => {
         document.getElementById(tabId).style.display = 'block';
     });
   });
+
+// Add new inventory item
+addItemBtn.onclick = () => {
+    const inventoryList = document.querySelector('.inventory-list');
+    const itemEntry = document.createElement('div');
+    itemEntry.className = 'inventory-item';
+    itemEntry.innerHTML = `
+        <input type="text" placeholder="Item Name">
+        <input type="number" placeholder="Quantity" min="1">
+        <button type="button" class="remove-item">×</button>
+    `;
+    inventoryList.appendChild(itemEntry);
+  
+    // Add event listener to remove item button
+    const removeBtn = itemEntry.querySelector('.remove-item');
+    removeBtn.onclick = () => itemEntry.remove();
+  }
+  
+  // Store games in localStorage for demo purposes
+  let games = JSON.parse(localStorage.getItem('dndGames')) || [];
+  
+  // Function to save games to localStorage
+  const saveGames = () => {
+    localStorage.setItem('dndGames', JSON.stringify(games));
+  };
+  
