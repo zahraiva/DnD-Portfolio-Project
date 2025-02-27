@@ -30,8 +30,8 @@
     <main>
         <section id="home" class="hero">
             <div class="hero-content">
-                <h1>Welcome to the Realm</h1>
-                <p>Embark on an epic journey through magical lands and legendary tales</p>
+                <h1>Enter a World of Wonders</h1>
+                <p>Discover Tales, Meet Legendary Heroes, Navigate Realms, and Let Our Chatbot Be Your Guide on Every Adventure!</p>
                 <a href="#story" class="cta-button">Begin Your Adventure</a>
             </div>
         </section>
@@ -100,7 +100,109 @@
                 </div>
             </div>
         </section>
+
+
     </main>
+
+
+
+    <!-- Create Game Modal -->
+    <div id="createGameModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create New Game</h2>
+            <form id="createGameForm">
+                <div class="form-section">
+                    <h3>Game Details</h3>
+                    <input type="text" name="gameName" placeholder="Game Name" required>
+                    <textarea name="gameDescription" placeholder="Game Description" rows="3"></textarea>
+                </div>
+
+                <div class="form-section">
+                    <h3>Characters</h3>
+                    <div id="charactersList">
+                        <div class="character-entry">
+                            <input type="text" name="characterName" placeholder="Character Name">
+                            <select name="characterClass" class="character-class">
+                                <option value="">Select Class</option>
+                                <option value="warrior">Warrior</option>
+                                <option value="mage">Mage</option>
+                                <option value="rogue">Rogue</option>
+                                <option value="cleric">Cleric</option>
+                            </select>
+                            <button type="button" class="add-details-btn">Add Skills & Items</button>
+                        </div>
+                    </div>
+                    <button type="button" id="addCharacterBtn" class="secondary-btn">+ Add Character</button>
+                </div>
+
+                <div class="form-section">
+                    <h3>Story & Map</h3>
+                    <select id="storySelect" required>
+                        <option value="">Select Story</option>
+                        <option value="lost-mines">Lost Mines of Phandelver</option>
+                        <option value="curse-strahd">Curse of Strahd</option>
+                        <option value="dragon-heist">Waterdeep: Dragon Heist</option>
+                    </select>
+                    <select id="mapSelect" required>
+                        <option value="">Select Map</option>
+                        <option value="sword-coast">Sword Coast</option>
+                        <option value="barovia">Barovia</option>
+                        <option value="waterdeep">Waterdeep</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">Create Game</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Character Details Modal -->
+    <div id="characterDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Character Details</h2>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="skills">Skills</button>
+                <button class="tab-btn" data-tab="inventory">Inventory</button>
+            </div>
+            <div class="tab-content" id="skillsTab">
+                <div class="skills-grid">
+                    <label><input type="checkbox"> Acrobatics</label>
+                    <label><input type="checkbox"> Animal Handling</label>
+                    <label><input type="checkbox"> Arcana</label>
+                    <label><input type="checkbox"> Athletics</label>
+                    <label><input type="checkbox"> Deception</label>
+                    <label><input type="checkbox"> History</label>
+                </div>
+            </div>
+            <div class="tab-content" id="inventoryTab" style="display: none;">
+                <div class="inventory-list">
+                    <div class="inventory-item">
+                        <input type="text" placeholder="Item Name">
+                        <input type="number" placeholder="Quantity" min="1">
+                        <button type="button" class="remove-item">×</button>
+                    </div>
+                </div>
+                <button type="button" id="addItemBtn" class="secondary-btn">+ Add Item</button>
+            </div>
+            <button class="submit-btn">Save Details</button>
+        </div>
+    </div>
+
+    <!-- My Games Modal -->
+    <div id="myGamesModal" class="modal">
+        <div class="modal-content games-modal-content">
+            <span class="close">&times;</span>
+            <h2>Saved Games</h2>
+            <div class="games-grid" id="gamesGrid">
+                <!-- Games will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <button id="myGamesBtn" class="game-btn saved-games-btn"><i class="fas fa-save"></i> Saved Games</button>
+    <button id="createGameBtn" class="game-btn create-game-btn"><i class="fas fa-plus"></i> Create Game</button>
 
     <footer>
         <div class="footer-content">
@@ -177,5 +279,7 @@
         // Set active link on page load
         updateActiveLink();
     </script>
+    <script src="game.js"></script>
+    <script src="saved-games.js"></script>
 </body>
 </html>
