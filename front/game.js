@@ -66,3 +66,13 @@ addCharacterBtn.onclick = () => {
         <button type="button" class="remove-character">×</button>
     `;
     charactersList.appendChild(characterEntry);
+  // Add event listener to the new "Add Skills & Items" button
+  const addDetailsBtn = characterEntry.querySelector('.add-details-btn');
+  addDetailsBtn.onclick = () => {
+      characterDetailsModal.style.display = 'block';
+  }
+
+  // Add event listener to remove character button
+  const removeBtn = characterEntry.querySelector('.remove-character');
+  removeBtn.onclick = () => characterEntry.remove();
+}
