@@ -145,4 +145,22 @@ const createGameCard = (game) => {
           <button class="game-action-btn edit">Edit Game</button>
           <button class="game-action-btn delete">Delete Game</button>
       </div>
-  `;  
+  `; 
+/ Add event listeners for edit and delete buttons
+  const editBtn = card.querySelector('.edit');
+  const deleteBtn = card.querySelector('.delete');
+  editBtn.onclick = (e) => {
+      e.stopPropagation();
+      // TODO: Implement edit functionality
+      alert('Edit functionality coming soon!');
+  };
+  deleteBtn.onclick = (e) => {
+      e.stopPropagation();
+      if (confirm('Are you sure you want to delete this game?')) {
+          games = games.filter(g => g.id !== game.id);
+          saveGames();
+          displayGames();
+      }
+  };
+  return card;
+};
