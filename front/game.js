@@ -116,4 +116,33 @@ addItemBtn.onclick = () => {
   const saveGames = () => {
     localStorage.setItem('dndGames', JSON.stringify(games));
   };
-  
+// Function to create a game card
+const createGameCard = (game) => {
+  const card = document.createElement('div');
+  card.className = 'game-card';
+  card.innerHTML = `
+      <h3>${game.name}</h3>
+      <p>${game.description}</p>
+      <div class="game-info">
+          <div class="game-info-item">
+              <i class="fas fa-users"></i>
+              <span>${game.characters.length} Characters</span>
+          </div>
+          <div class="game-info-item">
+              <i class="fas fa-map-marked-alt"></i>
+              <span>${game.map}</span>
+          </div>
+          <div class="game-info-item">
+              <i class="fas fa-book-open"></i>
+              <span>${game.story}</span>
+          </div>
+          <div class="game-info-item">
+              <i class="fas fa-calendar-alt"></i>
+              <span>${new Date(game.created).toLocaleDateString()}</span>
+          </div>
+      </div>
+      <div class="game-actions">
+          <button class="game-action-btn edit">Edit Game</button>
+          <button class="game-action-btn delete">Delete Game</button>
+      </div>
+  `;  
