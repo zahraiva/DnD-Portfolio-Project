@@ -164,3 +164,22 @@ const createGameCard = (game) => {
   };
   return card;
 };
+/ Form submission
+const createGameForm = document.getElementById('createGameForm');
+if (createGameForm) {
+  createGameForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const form = e.target;
+  // Collect form data
+  const newGame = {
+      id: Date.now(),
+      name: form.elements['gameName'].value,
+      description: form.elements['gameDescription'].value,
+      characters: Array.from(document.querySelectorAll('.character-entry')).map(entry => ({
+          name: entry.querySelector('input[name="characterName"]').value,
+          class: entry.querySelector('select[name="characterClass"]').value
+      })),
+      story: document.getElementById('storySelect').value,
+      map: document.getElementById('mapSelect').value,
+      created: new Date().toISOString()
+  };
