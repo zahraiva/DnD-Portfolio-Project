@@ -33,10 +33,10 @@ async def create_character(
 
 @router.get("/game_session/{game_session_id}", response_model=GameSessionResponse)
 async def get_game_session(game_session_id: str, db: AsyncSession = Depends(get_db)):
-    game_session = facades.get_game_session(db, game_session_id)
+    game_session = await facades.get_game_session(db, game_session_id)
     if not game_session:
         raise HTTPException(status_code=404, detail="Game session not found")
-    return await game_session
+    return game_session
 
 @router.get("/game_sessions/{dungeon_master_id}")
 async def get_all_game_sessions_by_dungeon_master(dungeon_master_id: str, db: AsyncSession = Depends(get_db)):
@@ -51,8 +51,8 @@ async def patch_game_session(
         state: dict,
         db: AsyncSession = Depends(get_db)
 ):
-    updated_gme_session = await facades.patch_game_session(db, game_session_id, state)
-    return updated_gme_session
+    updated_game_session = await facades.patch_game_session(db, game_session_id, state)
+    return updated_game_session
 
 @router.patch("/game_session/{game_session_id}/complete")
 async def complete_game_session(game_session_id: str, db: AsyncSession = Depends(get_db)):

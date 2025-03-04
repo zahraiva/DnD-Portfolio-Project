@@ -1,6 +1,8 @@
+import random
+from typing import List
 from backend.persistance.repository import DungeonMasterRepository
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.models import DungeonMaster, Character, Story, GameSession
+from backend.models import DungeonMaster, Character, Story, GameSession, CharacterAction, GameCharacter
 from backend.schemas.custom_oauth_bearer import CustomOAuthBearer
 from backend.utils.password import hash_password, verify_password
 from backend.utils.token import create_access_token
@@ -130,3 +132,70 @@ class DungeonMasterFacade:
     async def delete_game_session(self, db: AsyncSession, game_session_id: str):
         return await self.dungeon_master_repo.delete(db, GameSession, game_session_id)
 
+    async def create_game_character(self, db: AsyncSession,
+                                    character_id: str,
+                                    game_session_id: str,
+                                    dungeon_master_id: str,
+                                    health: int,
+                                    experience: int,
+                                    level: int,
+                                    inventory: List[str]
+                                    ):
+
+        game_character = await self.dungeon_master_repo.create(
+            db,
+            GameCharacter,
+            character_id=character_id,
+            game_session_id=game_session_id,
+            dungeon_master_id=dungeon_master_id,
+            health=health,
+            experience=experience,
+            level=level,
+            inventory=inventory
+        )
+        return game_character
+
+    async def get_game_character_by_id(self, db: AsyncSession, game_character_id: str):
+        return await self.dungeon_master_repo.get(db, GameCharacter, game_character_id)
+
+    async def get_all_game_characters(self, db: AsyncSession):
+        return await self.dungeon_master_repo.get_all(db, GameCharacter)
+
+    async def get_game_characters_by_game_session(self, db: AsyncSession, game_session_id: str):
+        return await self.dungeon_master_repo.get_all_by_attribute(db, GameCharacter, "game_session_id", game_session_id)
+
+    async def update_game_character(self, db: AsyncSession, game_character_id: str, **kwargs):
+        return await self.dungeon_master_repo.update(db, GameCharacter, game_character_id, **kwargs)
+
+    async def delete_game_character(self, db: AsyncSession, game_character_id: str):
+        return await self.dungeon_master_repo.delete(db, GameCharacter, game_character_id)
+
+    async def update_game_character_inventory(self, game_character_id: str, add_items: list[str],
+                                              remove_items: list[str], db: AsyncSession):
+        result = await db.execute(select(GameCharacter).where(GameCharacter.id == game_character_id))
+        game_character = result.scalars().first()
+
+        if game_character is None:
+            raise HTTPException(status_code=404, detail="Game character not found")
+
+        if game_character.inventory is None:
+            game_character.inventory = []
+
+        for item in add_items:
+            if item not in game_character.inventory:
+                game_character.inventory.append(item)
+        for item in remove_items:
+            if item in game_character.inventory:
+                game_character.inventory.remove(item)
+
+        await db.commit()
+        await db.refresh(game_character)
+
+        return game_character
+
+
+    async def create_action(self, db: AsyncSession, game_session_id: str, game_character_id: str, roll_value: int, action: str):
+        return await self.dungeon_master_repo.create(db, CharacterAction, game_session_id=game_session_id, game_character_id=game_character_id, roll_value=roll_value, action=action)
+
+    async def roll_dice(self):
+        return random.randint(1, 20)
