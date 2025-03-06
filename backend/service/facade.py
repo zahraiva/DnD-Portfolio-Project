@@ -1,5 +1,6 @@
 import random
 from typing import List
+from sqlalchemy.orm.attributes import flag_modified
 from backend.persistance.repository import DungeonMasterRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.models import DungeonMaster, Character, Story, GameSession, CharacterAction, GameCharacter
@@ -187,10 +188,10 @@ class DungeonMasterFacade:
         for item in remove_items:
             if item in game_character.inventory:
                 game_character.inventory.remove(item)
+        flag_modified(game_character, "inventory")
 
         await db.commit()
         await db.refresh(game_character)
-
         return game_character
 
 
