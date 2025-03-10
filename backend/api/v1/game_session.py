@@ -38,7 +38,7 @@ async def get_game_session(game_session_id: str, db: AsyncSession = Depends(get_
         raise HTTPException(status_code=404, detail="Game session not found")
     return game_session
 
-@router.get("/{dungeon_master_id}")
+@router.get("/get-all-game-sessions/{dungeon_master_id}")
 async def get_all_game_sessions_by_dungeon_master(dungeon_master_id: str, db: AsyncSession = Depends(get_db)):
     game_sessions = await facades.get_game_sessions_by_dungeon_master(db, dungeon_master_id)
     if not game_sessions:
