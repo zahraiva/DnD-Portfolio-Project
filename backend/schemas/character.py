@@ -4,7 +4,7 @@ from typing import Optional, List
 class CharacterCreate(BaseModel):
     name: str
     class_type: str
-    skills: str
+    skills: List[str]
 
 class CharacterUpdate(BaseModel):
     name: Optional[str] = None
