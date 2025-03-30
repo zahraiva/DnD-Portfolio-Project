@@ -198,5 +198,8 @@ class DungeonMasterFacade:
     async def create_action(self, db: AsyncSession, game_session_id: str, game_character_id: str, roll_value: int, action: str):
         return await self.dungeon_master_repo.create(db, CharacterAction, game_session_id=game_session_id, game_character_id=game_character_id, roll_value=roll_value, action=action)
 
+    async def get_character_action(self, db: AsyncSession, game_session_id: str):
+        return await self.dungeon_master_repo.get_all_by_attribute(db, CharacterAction, 'game_session_id', game_session_id)
+
     async def roll_dice(self):
         return random.randint(1, 20)

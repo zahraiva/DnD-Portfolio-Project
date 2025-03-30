@@ -43,7 +43,7 @@ async def get_character(
 ):
     character = await facades.get_character_by_id(db, character_id)
     if not character:
-        raise HTTPException(status_code=404, detail="Character not found")
+        raise HTTPException(status_code=404, detail="Characters not found")
     return character
 
 @router.get("/get-all-characters/{dungeon_master_id}")
