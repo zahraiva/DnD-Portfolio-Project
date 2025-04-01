@@ -32,10 +32,11 @@
     max-height: none;
 }
 
+/* Update the fullscreen button position to lower-right corner */
 .fullscreen-btn {
     position: absolute;
-    top: 15px;
-    right: 60px;
+    bottom: 20px; /* Position at the bottom instead of top */
+    right: 20px;
     z-index: 100;
     background: rgba(10, 31, 18, 0.8);
     color: var(--text-light);
