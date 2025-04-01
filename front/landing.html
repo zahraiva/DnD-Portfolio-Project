@@ -619,6 +619,24 @@
     <!-- Game Buttons -->
     <button id="myGamesBtn" class="game-btn saved-games-btn"><i class="fas fa-save"></i> Saved Games</button>
     <button id="createGameBtn" class="game-btn create-game-btn"><i class="fas fa-plus"></i> Create Game</button>
+    
+    <!-- Character Detail Modal -->
+    <div id="characterModal" class="character-modal">
+        <div class="character-modal-content">
+            <div class="character-modal-portrait">
+                <img id="modalCharacterImage" src="" alt="Character Portrait">
+            </div>
+            <div class="character-modal-info">
+                <h2 id="modalCharacterName"></h2>
+                <p id="modalCharacterClass"><strong>Class:</strong> <span></span></p>
+                <p id="modalCharacterRace"><strong>Race:</strong> <span></span></p>
+                <p id="modalCharacterLevel"><strong>Level:</strong> <span></span></p>
+                <p id="modalCharacterSpecialty"><strong>Specialty:</strong> <span></span></p>
+                <p id="modalCharacterBackground"><strong>Background:</strong> <span></span></p>
+            </div>
+            <div class="character-modal-close">&times;</div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -658,6 +676,7 @@
     <script src="navigation.js"></script>
     <script src="game.js"></script>
     <script src="characters.js"></script>
+    <script src="character-expansion.js"></script>
     <script src="button-fixer.js"></script>
 </body>
 </html>

@@ -685,6 +685,7 @@ h2 {
     gap: 1.5rem;
     border: 1px solid rgba(76, 175, 80, 0.2);
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .character-detail-card:hover {
@@ -706,18 +707,130 @@ h2 {
     color: var(--accent);
     overflow: hidden;
     border: 2px solid var(--accent);
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
+
+.character-portrait:hover {
+    transform: scale(1.05);
+    border-color: #8bde8f;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+
 
 .character-portrait img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center top;
+    transition: all 0.3s ease;
 }
+
+
 
 .character-info {
     flex: 1;
     text-align: left;
+}
+
+/* Character Detail Modal */
+.character-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.character-modal.show {
+    display: flex;
+}
+
+.character-modal-content {
+    background: rgba(10, 31, 18, 0.95);
+    width: 90%;
+    max-width: 800px;
+    border-radius: 10px;
+    padding: 2rem;
+    position: relative;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.character-modal-portrait {
+    width: 100%;
+    height: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid var(--accent);
+}
+
+.character-modal-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.character-modal-info {
+    color: #fff;
+}
+
+.character-modal-info h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+}
+
+.character-modal-info p {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.character-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff4444;
+    border: 1px solid #ff4444;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1.2rem;
+}
+
+.character-modal-close:hover {
+    background: rgba(255, 0, 0, 0.4);
+    transform: rotate(90deg);
+}
+
+@media (max-width: 768px) {
+    .character-modal-content {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+    }
+    
+    .character-modal-portrait {
+        height: 200px;
+    }
 }
 
 .character-info h4 {
