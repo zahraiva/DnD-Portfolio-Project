@@ -33,7 +33,7 @@ Here are some snapshots from the project:
 ![Lost Mine of Phandelver](https://static1.cbrimages.com/wordpress/wp-content/uploads/2021/01/Dungeons-Dragons-Lost-Mines-Green-Dragon.jpg)
 *Lost Mine of Phandelver Adventure*
 
-![The Wild Beyond the Witchlight](https://preview.redd.it/flisfh638nb91.jpg?width=768&format=pjpg&auto=webp&s=3e2ed4763e07c02a9fdb55a46a1d4ce06e0c860f)
+![The Wild Beyond the Witchlight](https://static1.thegamerimages.com/wordpress/wp-content/uploads/2023/11/cover-art-for-the-wild-beyond-the-witchlight-by-tyler-jacobson-final.jpg)
 *The Wild Beyond the Witchlight Adventure*
 
 
