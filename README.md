@@ -30,10 +30,10 @@ This project is a web application designed to provide a platform for Dungeons & 
 Here are some snapshots from the project:
 
 ### Adventure Details
-![Lost Mine of Phandelver](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.cbr.com%2Fdnd-5e-lost-mine-phandelver-guide%2F&psig=AOvVaw1OWvIRFXNIrrwL76cCaAa0&ust=1743606918760000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCNDz3IGQt4wDFQAAAAAdAAAAABAE)
+![Lost Mine of Phandelver](https://static1.cbrimages.com/wordpress/wp-content/uploads/2021/01/Dungeons-Dragons-Lost-Mines-Green-Dragon.jpg)
 *Lost Mine of Phandelver Adventure*
 
-![The Wild Beyond the Witchlight](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.reddit.com%2Fr%2Fwildbeyondwitchlight%2Fcomments%2Fwi0fls%2Fthe_wild_beyond_the_witchlight_reimagined_part_iv%2F&psig=AOvVaw0oKDWYQZOvQBXZivR-8c1t&ust=1743607019627000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCLDpxbCQt4wDFQAAAAAdAAAAABAE)
+![The Wild Beyond the Witchlight](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTpE5tZ9niMFBdCMmMftiQq_byVu55fzCiMw&s)
 *The Wild Beyond the Witchlight Adventure*
 
 
