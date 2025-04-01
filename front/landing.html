@@ -66,11 +66,16 @@
                         <button class="story-details-btn" data-story="phandelver">Learn More</button>
                         <button class="view-map-btn" data-map="phandelver">View Map</button>
                     </div>
-                    <div class="story-card">
-                        <i class="fas fa-magic"></i>
-                        <h3>Create Your Own</h3>
-                        <p>Craft a unique adventure with our tools and bring your imagination to life.</p>
-                        <button class="story-create-btn">Start Creating</button>
+                    <div class="story-card" id="witchlight-card">
+                        <i class="fas fa-hat-wizard"></i>
+                        <h3>The Wild Beyond the Witchlight</h3>
+                        <p>Embark on a journey through the Feywild, where magic and wonder await.</p>
+                        <div class="story-img-container">
+                            <img src="images/strahd.jpg" alt="The Wild Beyond the Witchlight" class="story-img">
+                        </div>
+                        <span class="story-badge">Levels 1-10</span>
+                        <button class="story-details-btn" data-story="witchlight">Learn More</button>
+                        <button class="view-map-btn" data-map="witchlight">View Map</button>
                     </div>
                 </div>
             </div>
@@ -85,6 +90,7 @@
                     <div class="map-tabs">
                         <button class="map-tab active" data-map="barovia">Barovia</button>
                         <button class="map-tab" data-map="phandelver">Phandelver</button>
+                        <button class="map-tab" data-map="witchlight">Witchlight</button>
                     </div>
                 </div>
                 
@@ -109,6 +115,16 @@
                     
                     <div id="phandelver-map" class="game-map">
                         <img src="images/phandelver.webp" alt="Map of Phandelver" class="map-base-img" 
+                             onload="this.setAttribute('data-loaded', 'true');">
+                        <div class="map-markers">
+                            <div class="character-marker draggable" data-character="player1" style="left: 50%; top: 50%;">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="witchlight-map" class="game-map">
+                        <img src="images/barovia.webp" alt="Map of Witchlight" class="map-base-img" 
                              onload="this.setAttribute('data-loaded', 'true');">
                         <div class="map-markers">
                             <div class="character-marker draggable" data-character="player1" style="left: 50%; top: 50%;">
@@ -206,6 +222,30 @@
                     <button class="view-map-btn" data-map="phandelver">View Map</button>
                 </div>
             </div>
+            
+            <div id="witchlight-details" class="story-details" style="display: none;">
+                <h2>The Wild Beyond the Witchlight</h2>
+                <div class="story-header">
+                    <div class="story-img-large">
+                        <img src="images/strahd-large.jpg" alt="The Wild Beyond the Witchlight">
+                    </div>
+                    <div class="story-info">
+                        <p><strong>Difficulty:</strong> Challenging</p>
+                        <p><strong>Level Range:</strong> 1-10</p>
+                        <p><strong>Setting:</strong> Fantasy</p>
+                        <p><strong>Featured Creatures:</strong> Fey, Hags, Sprites, Satyrs</p>
+                    </div>
+                </div>
+                <div class="story-description">
+                    <p>Embark on a journey through the Feywild, where magic and wonder await. Explore the mystical realm of Prismeer, where the fabric of reality is woven and unwoven.</p>
+                    <p>Meet the enigmatic Mr. Witchlight, a mysterious figure with a penchant for the unknown. Uncover the secrets of the Witchlight Carnival, a mystical traveling show that appears and disappears at random.</p>
+                    <p>Will you answer the call to adventure and brave the unknown dangers of the Feywild? The choice is yours.</p>
+                </div>
+                <div class="story-buttons">
+                    <button class="cta-button start-adventure-btn">Begin This Adventure</button>
+                    <button class="view-map-btn" data-map="witchlight">View Map</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -247,6 +287,7 @@
                         <option value="">Select Story</option>
                         <option value="lost-mines">Lost Mine of Phandelver</option>
                         <option value="curse-strahd">Curse of Strahd</option>
+                        <option value="witchlight">The Wild Beyond the Witchlight</option>
                     </select>
                 </div>
                 <button type="submit" class="submit-btn">Create Game</button>
