@@ -1,16 +1,14 @@
 # DnD Website Portfolio Project
 
-![DnD Logo](https://example.com/dnd-logo.png)
+![DnD Logo](https://preview.redd.it/ag87ht0ovct21.png?auto=webp&s=c201f3c99a27b61138d8d644fcb311b621403d35)
 
 Welcome to our DnD Website Portfolio Project. This project showcases our skills in web development by presenting a platform for Dungeons & Dragons (DnD) adventures.
 
-![GitHub last commit](https://img.shields.io/github/last-commit/zahraiva/DnD-Portfolio-Project)
-![GitHub repo size](https://img.shields.io/github/repo-size/zahraiva/DnD-Portfolio-Project)
-![GitHub contributors](https://img.shields.io/github/contributors/zahraiva/DnD-Portfolio-Project)
 
 ## Table of Contents
 - [Overview](#overview)
 - [Features](#features)
+- [Gallery](#gallery)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 
@@ -27,6 +25,24 @@ This project is a web application designed to provide a platform for Dungeons & 
 - **Game Creation**: Create and manage your own D&D games and characters.
   - **Character Management**: Add skills and items to your characters.
   - **Story Selection**: Choose from various D&D stories for your game.
+
+## Gallery
+Here are some snapshots from the project:
+
+### Adventure Details
+![Lost Mine of Phandelver](https://example.com/lost-mine-of-phandelver.png)
+*Lost Mine of Phandelver Adventure*
+
+![The Wild Beyond the Witchlight](https://example.com/the-wild-beyond-the-witchlight.png)
+*The Wild Beyond the Witchlight Adventure*
+
+### Game Creation
+![Create Game Modal](https://example.com/create-game-modal.png)
+*Create a new game with characters and stories*
+
+### Character Management
+![Character Details](https://example.com/character-details.png)
+*Manage your character's skills and items*
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
