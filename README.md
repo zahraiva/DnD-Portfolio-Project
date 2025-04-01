@@ -30,19 +30,12 @@ This project is a web application designed to provide a platform for Dungeons & 
 Here are some snapshots from the project:
 
 ### Adventure Details
-![Lost Mine of Phandelver](https://example.com/lost-mine-of-phandelver.png)
+![Lost Mine of Phandelver](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.cbr.com%2Fdnd-5e-lost-mine-phandelver-guide%2F&psig=AOvVaw1OWvIRFXNIrrwL76cCaAa0&ust=1743606918760000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCNDz3IGQt4wDFQAAAAAdAAAAABAE)
 *Lost Mine of Phandelver Adventure*
 
-![The Wild Beyond the Witchlight](https://example.com/the-wild-beyond-the-witchlight.png)
+![The Wild Beyond the Witchlight](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.reddit.com%2Fr%2Fwildbeyondwitchlight%2Fcomments%2Fwi0fls%2Fthe_wild_beyond_the_witchlight_reimagined_part_iv%2F&psig=AOvVaw0oKDWYQZOvQBXZivR-8c1t&ust=1743607019627000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCLDpxbCQt4wDFQAAAAAdAAAAABAE)
 *The Wild Beyond the Witchlight Adventure*
 
-### Game Creation
-![Create Game Modal](https://example.com/create-game-modal.png)
-*Create a new game with characters and stories*
-
-### Character Management
-![Character Details](https://example.com/character-details.png)
-*Manage your character's skills and items*
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
