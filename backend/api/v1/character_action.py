@@ -1,11 +1,19 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.database import get_db
 from backend.models.character_action import CharacterAction
+from backend.models.game_character import GameCharacter
 from backend.schemas.character_action import CharacterActionCreate, CharacterActionResponse, RollDiceResponse, StoryResponse
 import openai
+from openai import OpenAIError, Client
+import os
+from sqlalchemy.orm import joinedload
+import asyncio
 from sqlalchemy.future import select
 from backend.service import facades
+from dotenv import load_dotenv
+
+load_dotenv()
 
 router = APIRouter(prefix="/character-actions", tags=["Character Action Operations"])
 
@@ -27,36 +35,55 @@ async def submit_action(
     )
     return {"message": "Character action submitted successfully", "Character_action": new_character_action}
 
-# @router.post("/continue_story/", response_model=StoryResponse)
-# async def continue_story(game_session_id: str, db: AsyncSession = Depends(get_db)):
-#     # Fetch the latest actions for the session
-#     result = await db.execute(select(CharacterAction).filter(CharacterAction.game_session_id == game_session_id))
-#     actions = result.scalars().all()
-#
-#     if not actions:
-#         raise HTTPException(status_code=404, detail="No actions found for this session")
-#
-#     # Prepare prompt for AI
-#     prompt = "The story so far:\n"
-#     for action in actions:
-#         prompt += f"{action.action} (rolled {action.roll_value})\n"
-#
-#     prompt += "\nWhat happens next?"
-#
-#     # Call OpenAI API (replace with your key)
-#     openai.api_key = os.getenv("OPENAI_API_KEY")
-#     response = await openai.ChatCompletion.acreate(
-#         model="gpt-4",
-#         messages=[{"role": "system", "content": "You are a Dungeon Master continuing a D&D adventure."},
-#                   {"role": "user", "content": prompt}]
-#     )
-#
-#     ai_response = response["choices"][0]["message"]["content"]
-#
-#     # Save AI response
-#     new_story = Story(session_id=session_id, content=ai_response, created_at=datetime.utcnow())
-#     db.add(new_story)
-#     await db.commit()
-#     await db.refresh(new_story)
-#
-#     return {"session_id": session_id, "story": ai_response}
+
+@router.post("/continue-story/", response_model=StoryResponse)
+async def continue_story(game_session_id: str, db: AsyncSession = Depends(get_db)):
+    """Continues the story using OpenAI's ChatCompletion API based on character actions."""
+    actions = await db.execute(
+        select(CharacterAction)
+        .options(
+            joinedload(CharacterAction.game_character).joinedload(GameCharacter.character)
+        )
+        .where(CharacterAction.game_session_id == game_session_id)
+    )
+    actions = actions.scalars().all()
+
+    if not actions:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No actions found for this session")
+
+    # Construct the prompt based on character actions
+    prompt = "The story so far:\n"
+    for action in actions:
+        prompt += f"{action.game_character.character.name} performs the action: '{action.action}' (rolled {action.roll_value})\n"
+
+    prompt += "\nWhat happens next?"
+
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    if not openai_api_key:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="OpenAI API key is missing")
+
+    # Initialize the OpenAI client
+    client = Client(api_key=openai_api_key)
+
+    try:
+        # Use client.chat.completions.create for the latest OpenAI library
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",  # Use a GPT-3.5 or GPT-4 model
+            messages=[
+                {"role": "system", "content": "You are a Dungeon Master continuing a D&D adventure."},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=0.7,  # Adjust the creativity level
+            max_tokens=150,  # Adjust the token limit as needed
+        )
+        # Correctly access the response content
+        ai_response = response.choices[0].message.content.strip()  # Access the content attribute directly
+
+        await facades.update_game_session_state(db, game_session_id, ai_response)
+
+        return {"game_session_id": game_session_id, "story": ai_response}
+
+    except OpenAIError as e:
+        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=f"OpenAI API error: {e}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating story: {str(e)}")

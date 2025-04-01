@@ -7,7 +7,7 @@ from backend.schemas.custom_oauth_bearer import get_current_user
 from sqlalchemy.future import select
 from backend.service import facades
 
-router = APIRouter(tags=["Character Operations"])
+router = APIRouter(prefix="/characters", tags=["Character Operations"])
 
 @router.post("/create-character/")
 async def create_character(
@@ -30,6 +30,12 @@ async def create_character(
 
     return {"message": "Character created successfully", "character": new_character}
 
+
+@router.get("/get_all_characters")
+async def get_all_characters(db: AsyncSession = Depends(get_db)):
+    characters = await facades.get_all_characters(db)
+    return characters
+
 @router.get("/{character_id}")
 async def get_character(
     character_id: str,
@@ -37,13 +43,8 @@ async def get_character(
 ):
     character = await facades.get_character_by_id(db, character_id)
     if not character:
-        raise HTTPException(status_code=404, detail="Character not found")
+        raise HTTPException(status_code=404, detail="Characters not found")
     return character
-
-@router.get("/get-all-characters")
-async def get_all_characters(db: AsyncSession = Depends(get_db)):
-    characters = await facades.get_all_characters(db)
-    return characters
 
 @router.get("/get-all-characters/{dungeon_master_id}")
 async def get_characters_by_dungeon_master(
@@ -55,7 +56,7 @@ async def get_characters_by_dungeon_master(
         raise HTTPException(status_code=404, detail="There is no any character belonging to you")
     return characters
 
-@router.put("/update-character/{character_id}")
+@router.put("/update_character/{character_id}")
 async def update_character(
         character_id: str,
         character_data: CharacterUpdate,

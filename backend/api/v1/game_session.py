@@ -8,7 +8,7 @@ from sqlalchemy.future import select
 from backend.service import facades
 from typing import List
 
-router = APIRouter(tags=["Game Session Operations"])
+router = APIRouter(prefix="/game_sessions", tags=["Game Session Operations"])
 
 @router.post("/create-game_session/")
 async def create_character(
@@ -31,21 +31,21 @@ async def create_character(
 
     return {"message": "Game session created successfully", "game_session": new_game_session}
 
-@router.get("/game_session/{game_session_id}", response_model=GameSessionResponse)
+@router.get("/{game_session_id}", response_model=GameSessionResponse)
 async def get_game_session(game_session_id: str, db: AsyncSession = Depends(get_db)):
     game_session = await facades.get_game_session(db, game_session_id)
     if not game_session:
         raise HTTPException(status_code=404, detail="Game session not found")
     return game_session
 
-@router.get("/game_sessions/{dungeon_master_id}")
+@router.get("/get-all-game-sessions/{dungeon_master_id}")
 async def get_all_game_sessions_by_dungeon_master(dungeon_master_id: str, db: AsyncSession = Depends(get_db)):
     game_sessions = await facades.get_game_sessions_by_dungeon_master(db, dungeon_master_id)
     if not game_sessions:
         raise HTTPException(status_code=404, detail="There is no any game session belonging to you")
     return game_sessions
 
-@router.patch("/game_session/{game_session_id}", response_model=GameSessionResponse)
+@router.patch("/{game_session_id}", response_model=GameSessionResponse)
 async def patch_game_session(
         game_session_id: str,
         state: dict,
@@ -54,7 +54,7 @@ async def patch_game_session(
     updated_game_session = await facades.patch_game_session(db, game_session_id, state)
     return updated_game_session
 
-@router.patch("/game_session/{game_session_id}/complete")
+@router.patch("/{game_session_id}/complete")
 async def complete_game_session(game_session_id: str, db: AsyncSession = Depends(get_db)):
     try:
         game_session = await facades.end_game_session(db, game_session_id)
@@ -62,7 +62,7 @@ async def complete_game_session(game_session_id: str, db: AsyncSession = Depends
     except HTTPException as e:
         raise e
 
-@router.get("/game_session/{game_session_id}/completed")
+@router.get("/{game_session_id}/completed")
 async def get_completed_game_session(game_session_id: str, db: AsyncSession = Depends(get_db)):
     try:
         status = await facades.get_completed_game_session(db, game_session_id)

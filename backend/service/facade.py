@@ -1,5 +1,6 @@
 import random
 from typing import List
+from sqlalchemy.orm.attributes import flag_modified
 from backend.persistance.repository import DungeonMasterRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.models import DungeonMaster, Character, Story, GameSession, CharacterAction, GameCharacter
@@ -10,6 +11,8 @@ from datetime import timedelta
 from fastapi import HTTPException
 from backend.schemas.auth import SignupResponse, LoginResponse, SignupRequest
 from sqlalchemy.future import select
+from sqlalchemy.exc import NoResultFound
+from sqlalchemy import select
 from sqlalchemy import update
 
 class DungeonMasterFacade:
@@ -187,15 +190,43 @@ class DungeonMasterFacade:
         for item in remove_items:
             if item in game_character.inventory:
                 game_character.inventory.remove(item)
+        flag_modified(game_character, "inventory")
 
         await db.commit()
         await db.refresh(game_character)
-
         return game_character
 
 
     async def create_action(self, db: AsyncSession, game_session_id: str, game_character_id: str, roll_value: int, action: str):
         return await self.dungeon_master_repo.create(db, CharacterAction, game_session_id=game_session_id, game_character_id=game_character_id, roll_value=roll_value, action=action)
 
+    async def get_character_action(self, db: AsyncSession, game_session_id: str):
+        return await self.dungeon_master_repo.get_all_by_attribute(db, CharacterAction, 'game_session_id', game_session_id)
+
     async def roll_dice(self):
         return random.randint(1, 20)
+    
+    async def update_game_session_state(self, db: AsyncSession, game_session_id: str, new_story: str):
+
+        try:
+            # Fetch the game session by ID
+            game_session = await self.dungeon_master_repo.get(db, GameSession, game_session_id)
+
+            if not game_session:
+                raise HTTPException(status_code=404, detail="Game session not found")
+
+            # Update the story field
+            game_session.state = game_session.state or {}
+            game_session.state["story"] = new_story
+
+            # Commit the changes to the database
+            await db.commit()
+            await db.refresh(game_session)
+
+            return game_session
+
+        except NoResultFound:
+            raise HTTPException(status_code=404, detail="Game session not found")
+        except Exception as e:
+            await db.rollback()
+            raise HTTPException(status_code=500, detail=f"Error updating game session: {str(e)}")

@@ -7,7 +7,7 @@ from backend.schemas.custom_oauth_bearer import get_current_user
 from sqlalchemy.future import select
 from backend.service import facades
 
-router = APIRouter(tags=["Story Operations"])
+router = APIRouter(prefix="/stories", tags=["Story Operations"])
 
 @router.post("/create-story/", response_model=StoryResponse)
 async def create_story(
@@ -29,6 +29,13 @@ async def create_story(
 
     return new_story
 
+@router.get("/get-all-stories")
+async def get_all_stories(db: AsyncSession = Depends(get_db)):
+    stories = await facades.get_all_stories(db)
+    if not stories:
+        raise HTTPException(status_code=404, detail="Stories not found")
+    return stories
+
 @router.get("/{story_id}", response_model=StoryResponse)
 async def get_story(
         story_id: str,
@@ -39,10 +46,6 @@ async def get_story(
         raise HTTPException(status_code=404, detail="Story not found")
     return story
 
-@router.get("/get-all-stories", response_model=StoryResponse)
-async def get_all_stories(db: AsyncSession = Depends(get_db)):
-    stories = await facades.get_all_stories(db)
-    return stories
 
 @router.get("/get-all-stories/{dungeon_master_id}")
 async def get_stories_by_dungeon_master(
