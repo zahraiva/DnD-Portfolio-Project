@@ -365,26 +365,16 @@ h2 {
     border-radius: 8px;
     overflow: hidden;
     background: #0a1f12;
-    width: 100%;
-    height: auto;
-    min-height: 600px;
-    margin-bottom: 20px;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
+    width: fit-content;
+    height: fit-content;
+    margin: 0 auto 20px;
+    display: block;
 }
 
 .map-base-img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    background: #0a1f12;
     display: block;
-    margin: 0 auto;
+    width: 100%;
+    height: 100%;
 }
 
 /* Optimize map controls positioning for better visibility with larger maps */
@@ -425,13 +415,9 @@ h2 {
 }
 
 .game-map {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     display: none;
-    text-align: center;
+    width: fit-content;
+    height: fit-content;
 }
 
 .game-map.active {
@@ -548,28 +534,144 @@ h2 {
 #characters .section-content {
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
-.character-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
+.class-selection {
     width: 100%;
     max-width: 1000px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    padding: 0.5rem;
 }
 
-.character-card {
+.class-cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1.5rem;
+    width: 100%;
+    overflow-x: auto;
+    padding: 0.5rem 0;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) rgba(10, 31, 18, 0.5);
+    -webkit-overflow-scrolling: touch;
+}
+
+.class-cards::-webkit-scrollbar {
+    height: 8px;
+}
+
+.class-cards::-webkit-scrollbar-track {
+    background: rgba(10, 31, 18, 0.5);
+    border-radius: 10px;
+}
+
+.class-cards::-webkit-scrollbar-thumb {
+    background-color: var(--accent);
+    border-radius: 10px;
+}
+
+.class-card {
     background: rgba(10, 31, 18, 0.8);
     padding: 2rem;
     border-radius: 10px;
     text-align: center;
     transition: all 0.3s ease;
     border: 1px solid rgba(76, 175, 80, 0.2);
-    backdrop-filter: blur(10px);
-    height: 100%;
+    cursor: pointer;
+    flex: 0 0 auto;
+    min-width: 200px;
+    max-width: 250px;
+    width: calc(25% - 1.125rem);
+}
+
+.class-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent);
+}
+
+.view-characters-btn {
+    background: var(--accent);
+    color: var(--text-dark);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    margin-top: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.view-characters-btn:hover {
+    background: var(--accent-light);
+    transform: scale(1.05);
+}
+
+.character-details-container {
+    width: 100%;
+    max-width: 1000px;
+}
+
+.character-details {
+    background: rgba(10, 31, 18, 0.6);
+    border-radius: 10px;
+    padding: 2rem;
+    margin-top: 2rem;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.character-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.character-detail-card {
+    background: rgba(10, 31, 18, 0.8);
+    border-radius: 10px;
+    padding: 1.5rem;
     display: flex;
-    flex-direction: column;
+    gap: 1.5rem;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    transition: all 0.3s ease;
+}
+
+.character-detail-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent);
+}
+
+.character-portrait {
+    flex: 0 0 80px;
+    height: 80px;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
     align-items: center;
+    font-size: 2.5rem;
+    color: var(--accent);
+}
+
+.character-info {
+    flex: 1;
+    text-align: left;
+}
+
+.character-info h4 {
+    margin-top: 0;
+    color: var(--accent);
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+}
+
+.character-info p {
+    margin: 0.3rem 0;
+    font-size: 0.9rem;
 }
 
 .character-card:hover {
@@ -866,13 +968,9 @@ footer {
 }
 
 .game-map {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     display: none;
-    text-align: center;
+    width: fit-content;
+    height: fit-content;
 }
 
 .game-map.active {
