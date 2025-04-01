@@ -1,0 +1,22 @@
+.button-status {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(10, 31, 18, 0.9);
+    color: #7ac67d;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 9999;
+    border: 1px solid #7ac67d;
+    display: none;
+}
+
+.button-status.show {
+    display: block;
+}
+
+.button-error {
+    color: #ff4444;
+    border-color: #ff4444;
+}

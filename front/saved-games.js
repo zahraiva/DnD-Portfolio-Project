@@ -151,25 +151,78 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Continue a saved game
     function continueGame(game) {
-        // Close the modal
-        if (myGamesModal) myGamesModal.style.display = 'none';
-        
-        // Show notification
-        notify(`Continuing "${game.name || 'Untitled Adventure'}"...`);
-        
-        // Switch to map page
-        if (window.showPage) {
-            window.showPage('map');
-        }
-        
-        // Select the correct map tab
-        setTimeout(() => {
-            const mapTab = document.querySelector(`.map-tab[data-map="${game.map || 'barovia'}"]`);
-            if (mapTab) mapTab.click();
+        try {
+            console.log('BASIC MAP NAVIGATION - continuing game:', game);
             
-            // Update session panel with game info
-            updateSessionPanel(game);
-        }, 200);
+            // 1. Save the game data first
+            sessionStorage.setItem('activeGame', JSON.stringify(game));
+            
+            // 2. Close the modal
+            if (myGamesModal) {
+                myGamesModal.style.display = 'none';
+            }
+            
+            // 3. DIRECT APPROACH: locate and manually show the map page
+            const mapPage = document.getElementById('map');
+            if (!mapPage) {
+                console.error('MAP PAGE NOT FOUND');
+                return;
+            }
+            
+            // 4. Hide all pages using manual DOM manipulation
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+                page.style.display = 'none';
+            });
+            
+            // 5. Show map page
+            mapPage.classList.add('active');
+            mapPage.style.display = 'block';
+            
+            // 6. Update the navigation bar
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('data-page') === 'map') {
+                    link.classList.add('active');
+                }
+            });
+            
+            // 7. Show notification
+            notify(`Continuing "${game.name || 'Untitled Adventure'}"...`);
+            
+            // 8. Select the correct map tab after a little delay
+            setTimeout(() => {
+                const mapId = game.map || 'barovia';
+                const mapTab = document.querySelector(`.map-tab[data-map="${mapId}"]`);
+                
+                if (mapTab) {
+                    // Manually trigger map tab behavior
+                    document.querySelectorAll('.map-tab').forEach(tab => tab.classList.remove('active'));
+                    mapTab.classList.add('active');
+                    
+                    document.querySelectorAll('.game-map').forEach(map => {
+                        map.classList.remove('active');
+                        map.style.display = 'none';
+                    });
+                    
+                    const targetMap = document.getElementById(`${mapId}-map`);
+                    if (targetMap) {
+                        targetMap.classList.add('active');
+                        targetMap.style.display = 'block';
+                    }
+                    
+                    // Load characters after a delay to ensure map is ready
+                    setTimeout(() => {
+                        if (typeof loadCharactersOntoMap === 'function') {
+                            loadCharactersOntoMap(game);
+                        }
+                    }, 100);
+                }
+            }, 100);
+        } catch (error) {
+            console.error('ERROR IN CONTINUE GAME:', error);
+            alert('Error continuing game: ' + error.message);
+        }
     }
     
     // Delete a game
@@ -193,6 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Update the session panel with game information
+    /*
     function updateSessionPanel(game) {
         const sessionName = document.getElementById('session-name');
         const sessionDescription = document.getElementById('session-description');
@@ -240,6 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
             sessionPanel.classList.remove('collapsed');
         }
     }
+    */
     
     // Helper function to get icon for character class
     function getClassIcon(className) {
@@ -464,6 +519,296 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // Function to load character markers onto the map
+    function loadCharactersOntoMap(game) {
+        // Find the active map
+        const activeMap = document.querySelector('.game-map.active');
+        if (!activeMap) return;
+        
+        // Get markers container
+        const markersContainer = activeMap.querySelector('.map-markers');
+        if (!markersContainer) return;
+        
+        // Clear existing markers
+        markersContainer.innerHTML = '';
+        
+        // Create the characters container
+        const charactersContainer = document.createElement('div');
+        charactersContainer.className = 'map-characters-container';
+        charactersContainer.innerHTML = `
+            <h3>Characters</h3>
+            <div class="map-characters-list"></div>
+        `;
+        
+        // Add character markers to the map and to the characters list
+        const charactersList = charactersContainer.querySelector('.map-characters-list');
+        
+        // Add each character
+        game.characters.forEach((character, index) => {
+            if (!character.name && !character.class) return; // Skip empty characters
+            
+            // Create random position on the map
+            const left = 10 + Math.random() * 80; // 10% to 90% of width
+            const top = 10 + Math.random() * 80; // 10% to 90% of height
+            
+            // Create marker icon based on character class
+            let markerIcon = 'fa-user-circle';
+            let markerColor = '#7ac67d';
+            
+            switch(character.class) {
+                case 'warrior':
+                    markerIcon = 'fa-shield-alt';
+                    markerColor = '#e53935';
+                    break;
+                case 'mage':
+                    markerIcon = 'fa-hat-wizard';
+                    markerColor = '#2196f3';
+                    break;
+                case 'rogue':
+                    markerIcon = 'fa-mask';
+                    markerColor = '#546e7a';
+                    break;
+                case 'cleric':
+                    markerIcon = 'fa-pray';
+                    markerColor = '#ffc107';
+                    break;
+            }
+            
+            // Create marker DOM element
+            const marker = document.createElement('div');
+            marker.className = 'character-marker draggable';
+            marker.setAttribute('data-character-id', index);
+            marker.setAttribute('data-character-name', character.name || 'Unnamed');
+            marker.setAttribute('data-character-class', character.class || 'unknown');
+            marker.style.left = `${left}%`;
+            marker.style.top = `${top}%`;
+            marker.style.backgroundColor = markerColor;
+            marker.innerHTML = `<i class="fas ${markerIcon}"></i>`;
+            
+            // Add marker to map
+            markersContainer.appendChild(marker);
+            
+            // Create entry in characters list
+            const charListEntry = document.createElement('div');
+            charListEntry.className = 'map-character-item';
+            charListEntry.setAttribute('data-character-id', index);
+            
+            charListEntry.innerHTML = `
+                <div class="character-avatar ${character.class || 'unknown'}">
+                    <i class="fas ${markerIcon}"></i>
+                </div>
+                <div class="character-info">
+                    <h4 class="character-name">${character.name || 'Unnamed Character'}</h4>
+                    <p class="character-class">${formatClassName(character.class)}</p>
+                </div>
+                <div class="character-actions">
+                    <button title="Locate on map" class="locate-character-btn"><i class="fas fa-map-marker-alt"></i></button>
+                    <button title="View details" class="view-character-btn"><i class="fas fa-info-circle"></i></button>
+                </div>
+            `;
+            
+            // Add to characters list
+            charactersList.appendChild(charListEntry);
+            
+            // Add event listener to locate button
+            const locateBtn = charListEntry.querySelector('.locate-character-btn');
+            locateBtn.addEventListener('click', () => {
+                // Remove highlight from all markers
+                document.querySelectorAll('.character-marker').forEach(m => {
+                    m.classList.remove('highlight');
+                });
+                
+                // Add highlight class to the marker
+                marker.classList.add('highlight');
+                
+                // Scroll map to show marker (if needed)
+                marker.scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'});
+            });
+            
+            // Add event listener to view details button
+            const viewBtn = charListEntry.querySelector('.view-character-btn');
+            viewBtn.addEventListener('click', () => {
+                showCharacterDetails(character);
+            });
+        });
+        
+        // Add characters container to map
+        document.querySelector('.map-container').appendChild(charactersContainer);
+        
+        // Make markers draggable
+        makeMarkersMovable();
+    }
+    
+    // Function to show character details
+    function showCharacterDetails(character) {
+        // Create a modal to show character details
+        const detailsModal = document.createElement('div');
+        detailsModal.className = 'character-details-modal';
+        
+        // Format skills and items for display
+        const skills = character.skills ? character.skills.split('\n').filter(s => s.trim()) : [];
+        const items = character.items ? character.items.split('\n').filter(i => i.trim()) : [];
+        
+        // Create skills HTML
+        let skillsHtml = '';
+        if (skills.length > 0) {
+            skillsHtml = `
+                <div class="character-skills">
+                    <h4>Skills</h4>
+                    <ul>${skills.map(skill => `<li><i class="fas fa-check-circle"></i> ${skill}</li>`).join('')}</ul>
+                </div>
+            `;
+        } else {
+            skillsHtml = '<p class="no-data">No skills added</p>';
+        }
+        
+        // Create items HTML
+        let itemsHtml = '';
+        if (items.length > 0) {
+            itemsHtml = `
+                <div class="character-items">
+                    <h4>Items</h4>
+                    <ul>${items.map(item => `<li><i class="fas fa-box"></i> ${item}</li>`).join('')}</ul>
+                </div>
+            `;
+        } else {
+            itemsHtml = '<p class="no-data">No items added</p>';
+        }
+        
+        // Set modal content
+        detailsModal.innerHTML = `
+            <div class="character-details-content">
+                <div class="character-details-header">
+                    <div class="character-avatar large ${character.class || 'unknown'}">
+                        <i class="fas ${getClassIcon(character.class)}"></i>
+                    </div>
+                    <div class="character-header-info">
+                        <h3>${character.name || 'Unnamed Character'}</h3>
+                        <p class="character-class">${formatClassName(character.class)}</p>
+                    </div>
+                    <button class="close-details-modal">&times;</button>
+                </div>
+                <div class="character-details-body">
+                    ${skillsHtml}
+                    ${itemsHtml}
+                </div>
+            </div>
+        `;
+        
+        // Add modal to the document
+        document.body.appendChild(detailsModal);
+        
+        // Add close button event listener
+        const closeBtn = detailsModal.querySelector('.close-details-modal');
+        closeBtn.addEventListener('click', () => {
+            detailsModal.remove();
+        });
+        
+        // Add click outside to close
+        detailsModal.addEventListener('click', (e) => {
+            if (e.target === detailsModal) {
+                detailsModal.remove();
+            }
+        });
+        
+        // Add escape key to close
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                detailsModal.remove();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
+        
+        // Animation to appear
+        setTimeout(() => {
+            detailsModal.classList.add('show');
+        }, 10);
+    }
+    
+    // Function to make character markers draggable
+    function makeMarkersMovable() {
+        const markers = document.querySelectorAll('.character-marker');
+        
+        markers.forEach(marker => {
+            marker.addEventListener('mousedown', dragStart);
+            marker.addEventListener('touchstart', dragStart);
+        });
+        
+        // Drag start handler
+        function dragStart(e) {
+            e.preventDefault();
+            const marker = this;
+            
+            // Add dragging class
+            marker.classList.add('dragging');
+            
+            // Store initial position
+            const mapContainer = marker.closest('.game-map');
+            const rect = mapContainer.getBoundingClientRect();
+            
+            // Mouse or touch position
+            let startX, startY;
+            if (e.type === 'touchstart') {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            } else {
+                startX = e.clientX;
+                startY = e.clientY;
+            }
+            
+            // Initial marker position (percentage)
+            const startLeft = parseFloat(marker.style.left);
+            const startTop = parseFloat(marker.style.top);
+            
+            // Move function
+            function dragMove(e) {
+                let currentX, currentY;
+                if (e.type === 'touchmove') {
+                    currentX = e.touches[0].clientX;
+                    currentY = e.touches[0].clientY;
+                } else {
+                    currentX = e.clientX;
+                    currentY = e.clientY;
+                }
+                
+                // Calculate delta
+                const deltaX = currentX - startX;
+                const deltaY = currentY - startY;
+                
+                // Calculate new position in percentage
+                let newLeft = startLeft + (deltaX / rect.width) * 100;
+                let newTop = startTop + (deltaY / rect.height) * 100;
+                
+                // Restrict to bounds
+                newLeft = Math.max(0, Math.min(100, newLeft));
+                newTop = Math.max(0, Math.min(100, newTop));
+                
+                // Update marker position
+                marker.style.left = `${newLeft}%`;
+                marker.style.top = `${newTop}%`;
+            }
+            
+            // End drag function
+            function dragEnd() {
+                // Remove dragging class
+                marker.classList.remove('dragging');
+                
+                // Remove event listeners
+                document.removeEventListener('mousemove', dragMove);
+                document.removeEventListener('touchmove', dragMove);
+                document.removeEventListener('mouseup', dragEnd);
+                document.removeEventListener('touchend', dragEnd);
+            }
+            
+            // Add document event listeners
+            document.addEventListener('mousemove', dragMove);
+            document.addEventListener('touchmove', dragMove);
+            document.addEventListener('mouseup', dragEnd);
+            document.addEventListener('touchend', dragEnd);
+        }
+    }
+    
     // Event listeners
     if (myGamesBtn) {
         myGamesBtn.addEventListener('click', () => {
@@ -482,4 +827,27 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Display games on load
     displaySavedGames();
+    
+    // Load active game if it exists in session storage
+    const activeGameData = sessionStorage.getItem('activeGame');
+    if (activeGameData) {
+        try {
+            const game = JSON.parse(activeGameData);
+            
+            // If we're on the map page, load the characters
+            const mapPage = document.getElementById('map');
+            if (mapPage && mapPage.classList.contains('active')) {
+                // Select the correct map tab
+                const mapTab = document.querySelector(`.map-tab[data-map="${game.map || 'barovia'}"]`);
+                if (mapTab) mapTab.click();
+                
+                // Load characters onto the map
+                setTimeout(() => {
+                    loadCharactersOntoMap(game);
+                }, 200);
+            }
+        } catch (e) {
+            console.error('Error loading active game:', e);
+        }
+    }
 });

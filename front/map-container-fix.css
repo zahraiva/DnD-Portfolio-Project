@@ -1,0 +1,100 @@
+/* This CSS fixes map container sizing and positioning */
+
+.map-container {
+    position: relative;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #0a1f12;
+    margin: 0 auto; /* Center the container */
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.map-container img {
+    object-fit: contain; /* Always show the entire image */
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Fullscreen mode styling */
+.map-container.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1500;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    max-width: none;
+    max-height: none;
+}
+
+.fullscreen-btn {
+    position: absolute;
+    top: 15px;
+    right: 60px;
+    z-index: 100;
+    background: rgba(10, 31, 18, 0.8);
+    color: var(--text-light);
+    border: 1px solid var(--accent);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.fullscreen-btn:hover {
+    background: rgba(122, 198, 125, 0.2);
+    transform: scale(1.1);
+}
+
+/* Map loading indicator */
+.map-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(10, 31, 18, 0.8);
+    padding: 15px 25px;
+    border-radius: 30px;
+    border: 1px solid var(--accent);
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 150;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.map-loading.show {
+    opacity: 1;
+}
+
+.map-loading i {
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Handle mobile view */
+@media (max-width: 768px) {
+    .map-container {
+        max-width: 95vw;
+        height: auto !important; /* Allow height to be determined by content */
+        min-height: 60vh;
+    }
+}

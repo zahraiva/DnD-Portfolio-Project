@@ -1,158 +1,362 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     console.log('Map script loaded');
     
-    // Reference elements
-    const mapTabs = document.querySelectorAll('.map-tab');
-    const gameMaps = document.querySelectorAll('.game-map');
-    const addCharacterBtn = document.querySelector('.add-character-btn');
-    const resetMapBtn = document.querySelector('.reset-map-btn');
+    // Initialize everything
+    setupMapImages();
+    dynamicMapSizing();
+    centerAndSizeMap();
+    setupMapTabs();
+    attachButtonHandlers();
     
-    // Make the map tabs work
-    mapTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            console.log(`Switching to map: ${tab.getAttribute('data-map')}`);
+    // Make all character markers draggable
+    document.querySelectorAll('.character-marker.draggable').forEach(function(marker) {
+        makeMarkerDraggable(marker);
+    });
+    
+    // Directly attach button click handlers
+    function attachButtonHandlers() {
+        console.log('Attaching map button handlers');
+        
+        // Add Character button handler
+        const addCharacterBtn = document.querySelector('.add-character-btn');
+        if (addCharacterBtn) {
+            // Remove existing listeners
+            const newAddBtn = addCharacterBtn.cloneNode(true);
+            addCharacterBtn.parentNode.replaceChild(newAddBtn, addCharacterBtn);
             
-            // Update active tab
-            mapTabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
+            newAddBtn.onclick = function(e) {
+                e.preventDefault();
+                console.log('Add character button clicked');
+                showCharacterSelection();
+                return false;
+            };
+        }
+        
+        // Reset Map button handler
+        const resetMapBtn = document.querySelector('.reset-map-btn');
+        if (resetMapBtn) {
+            // Remove existing listeners
+            const newResetBtn = resetMapBtn.cloneNode(true);
+            resetMapBtn.parentNode.replaceChild(newResetBtn, resetMapBtn);
             
-            // Update active map
-            const mapId = tab.getAttribute('data-map');
-            gameMaps.forEach(map => {
-                map.classList.remove('active');
-                if (map.id === `${mapId}-map`) {
-                    map.classList.add('active');
+            newResetBtn.onclick = function(e) {
+                e.preventDefault();
+                console.log('Reset map button clicked');
+                resetMap();
+                return false;
+            };
+        }
+    }
+    
+    // Setup map images with simple handling
+    function setupMapImages() {
+        console.log('Setting up map images with basic centering');
+        
+        // Get all map images
+        const mapImages = document.querySelectorAll('.map-base-img');
+        
+        mapImages.forEach(img => {
+            // Set a dark background by default
+            img.style.background = '#0a1f12';
+            
+            // When image loads, ensure it's centered and contained
+            img.onload = function() {
+                // Always use contain to show the entire image
+                img.style.objectFit = 'contain';
+                
+                console.log(`Map image loaded: ${img.src} (${this.naturalWidth}x${this.naturalHeight})`);
+            };
+            
+            // Ensure onload runs for cached images
+            if (img.complete) {
+                img.onload();
+            }
+        });
+    }
+    
+    // Function to resize map container based on the actual image dimensions
+    function resizeMapContainerToImage(mapId) {
+        const mapContainer = document.querySelector('.map-container');
+        const mapImage = document.querySelector(`#${mapId}-map .map-base-img`);
+        
+        if (!mapContainer || !mapImage) return;
+        
+        // Get the image's natural dimensions
+        const imgWidth = mapImage.naturalWidth;
+        const imgHeight = mapImage.naturalHeight;
+        
+        if (!imgWidth || !imgHeight) {
+            console.log(`Image dimensions not available for ${mapId} map`);
+            return;
+        }
+        
+        console.log(`Image dimensions for ${mapId}: ${imgWidth}x${imgHeight}`);
+        
+        // Calculate aspect ratio
+        const aspectRatio = imgWidth / imgHeight;
+        
+        // Get viewport dimensions
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        
+        // Calculate maximum container dimensions based on viewport
+        // We'll use a percentage of the viewport while maintaining the image's aspect ratio
+        let containerHeight, containerWidth;
+        
+        if (viewportWidth >= 768) {
+            // For desktop: Use 80% of viewport height
+            containerHeight = Math.min(viewportHeight * 0.8, imgHeight);
+            containerWidth = containerHeight * aspectRatio;
+            
+            // Make sure width doesn't exceed 95% of viewport width
+            if (containerWidth > viewportWidth * 0.95) {
+                containerWidth = viewportWidth * 0.95;
+                containerHeight = containerWidth / aspectRatio;
+            }
+        } else {
+            // For mobile: Use 100% of viewport width
+            containerWidth = viewportWidth * 0.95;
+            containerHeight = containerWidth / aspectRatio;
+            
+            // Make sure height isn't too large on mobile
+            if (containerHeight > viewportHeight * 0.7) {
+                containerHeight = viewportHeight * 0.7;
+                containerWidth = containerHeight * aspectRatio;
+            }
+        }
+        
+        // Apply the calculated dimensions
+        mapContainer.style.width = `${containerWidth}px`;
+        mapContainer.style.height = `${containerHeight}px`;
+        mapImage.style.objectFit = "contain"; // Always use contain to avoid cropping
+        
+        console.log(`Resized container to ${containerWidth.toFixed(0)}x${containerHeight.toFixed(0)}px`);
+    }
+    
+    // This function to automatically size containers based on image dimensions
+    function dynamicMapSizing() {
+        console.log('Setting up dynamic map sizing');
+        
+        // Process each map tab to handle switching between maps
+        document.querySelectorAll('.map-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const mapId = this.getAttribute('data-map');
+                console.log(`Map tab clicked: ${mapId}`);
+                
+                // Short delay to ensure the map is visible
+                setTimeout(() => {
+                    resizeMapContainerToImage(mapId);
+                }, 50);
+            });
+        });
+        
+        // Handle initial sizing for the active map
+        const activeMap = document.querySelector('.game-map.active');
+        if (activeMap) {
+            const mapId = activeMap.id.replace('-map', '');
+            resizeMapContainerToImage(mapId);
+        }
+        
+        // Handle window resize events
+        window.addEventListener('resize', function() {
+            const activeMap = document.querySelector('.game-map.active');
+            if (activeMap) {
+                const mapId = activeMap.id.replace('-map', '');
+                resizeMapContainerToImage(mapId);
+            }
+        });
+    }
+    
+    // Exactly match container to image dimensions
+    function fixMapSizingAndBackground(mapId) {
+        console.log(`Fixing map sizing and background for: ${mapId}`);
+        
+        const mapContainer = document.querySelector('.map-container');
+        const mapImage = document.querySelector(`#${mapId}-map .map-base-img`);
+        const gameMap = document.querySelector(`#${mapId}-map`);
+        
+        if (!mapContainer || !mapImage || !gameMap) return;
+        
+        // First ensure the background color matches the image dimensions
+        gameMap.style.backgroundColor = '#0a1f12';
+        
+        // Wait for image to be fully loaded
+        if (!mapImage.complete) {
+            console.log('Image not yet loaded, setting onload handler');
+            mapImage.onload = function() {
+                setContainerAndBackground(mapContainer, mapImage, gameMap, mapId);
+            };
+        } else {
+            setContainerAndBackground(mapContainer, mapImage, gameMap, mapId);
+        }
+    }
+    
+    // Function to set container size and background to match image exactly
+    function setContainerAndBackground(container, image, gameMap, mapId) {
+        // Get image natural dimensions
+        const imgWidth = image.naturalWidth;
+        const imgHeight = image.naturalHeight;
+        
+        if (!imgWidth || !imgHeight) {
+            console.log('Image dimensions not available');
+            return;
+        }
+        
+        console.log(`Image dimensions: ${imgWidth}x${imgHeight}`);
+        
+        // Set container size to match image dimensions with max constraints
+        const maxWidth = Math.min(window.innerWidth * 0.95, imgWidth);
+        const maxHeight = Math.min(window.innerHeight * 0.75, imgHeight);
+        
+        // Calculate container size maintaining aspect ratio
+        const aspectRatio = imgWidth / imgHeight;
+        let containerWidth, containerHeight;
+        
+        if (aspectRatio > 1) { // Landscape image
+            containerWidth = maxWidth;
+            containerHeight = containerWidth / aspectRatio;
+            
+            // If height is still too tall
+            if (containerHeight > maxHeight) {
+                containerHeight = maxHeight;
+                containerWidth = containerHeight * aspectRatio;
+            }
+        } else { // Portrait image
+            containerHeight = maxHeight;
+            containerWidth = containerHeight * aspectRatio;
+            
+            // If width is still too wide
+            if (containerWidth > maxWidth) {
+                containerWidth = maxWidth;
+                containerHeight = containerWidth / aspectRatio;
+            }
+        }
+        
+        // Apply dimensions
+        container.style.width = `${Math.round(containerWidth)}px`;
+        container.style.height = `${Math.round(containerHeight)}px`;
+        
+        // Center the map container
+        container.style.margin = '0 auto';
+        
+        // Create a background container with the exact same dimensions as the image
+        const backgroundElement = gameMap.querySelector('.map-background');
+        if (!backgroundElement) {
+            // Create background element if it doesn't exist
+            const background = document.createElement('div');
+            background.className = 'map-background';
+            gameMap.insertBefore(background, gameMap.firstChild);
+        }
+        
+        // Position the background element to match the image exactly
+        const background = gameMap.querySelector('.map-background');
+        background.style.position = 'absolute';
+        background.style.top = '0';
+        background.style.left = '0';
+        background.style.width = '100%';
+        background.style.height = '100%';
+        background.style.backgroundColor = '#0a1f12';
+        background.style.zIndex = '-1';
+        
+        // Make sure the image fits perfectly in its container
+        image.style.objectFit = 'contain';
+        image.style.width = '100%';
+        image.style.height = '100%';
+        image.style.display = 'block';
+        image.style.margin = '0 auto';
+        image.style.position = 'relative';
+        image.style.zIndex = '1';
+        
+        // Log the container dimensions
+        console.log(`Container sized to ${Math.round(containerWidth)}x${Math.round(containerHeight)}`);
+    }
+    
+    // Ensure map is centered and properly sized
+    function centerAndSizeMap() {
+        console.log('Setting up map sizing, centering, and background');
+        
+        // Process each map tab
+        document.querySelectorAll('.map-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const mapId = this.getAttribute('data-map');
+                console.log(`Map tab clicked: ${mapId}`);
+                
+                // Short delay to ensure the map is visible
+                setTimeout(() => {
+                    fixMapSizingAndBackground(mapId);
+                }, 50);
+            });
+        });
+        
+        // Handle initial sizing for the active map
+        const activeMap = document.querySelector('.game-map.active');
+        if (activeMap) {
+            const mapId = activeMap.id.replace('-map', '');
+            fixMapSizingAndBackground(mapId);
+        }
+        
+        // Handle window resize events
+        window.addEventListener('resize', function() {
+            const activeMap = document.querySelector('.game-map.active');
+            if (activeMap) {
+                const mapId = activeMap.id.replace('-map', '');
+                fixMapSizingAndBackground(mapId);
+            }
+        });
+    }
+    
+    // Properly handle map tab selection
+    function setupMapTabs() {
+        console.log('Setting up map tab selection');
+        
+        // Get all map tabs
+        const mapTabs = document.querySelectorAll('.map-tab');
+        
+        // Add click event to each tab
+        mapTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                mapTabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Get map ID
+                const mapId = this.getAttribute('data-map');
+                console.log(`Switching to map: ${mapId}`);
+                
+                // Hide all maps
+                const maps = document.querySelectorAll('.game-map');
+                maps.forEach(map => {
+                    map.classList.remove('active');
+                    map.style.display = 'none';
+                });
+                
+                // Show selected map
+                const selectedMap = document.getElementById(`${mapId}-map`);
+                if (selectedMap) {
+                    selectedMap.classList.add('active');
+                    selectedMap.style.display = 'block';
+                    
+                    // Resize the map container to match the image
+                    fixMapSizingAndBackground(mapId);
+                    
+                    // Show loading indicator while map is loading
+                    const loadingIndicator = document.querySelector('.map-loading');
+                    if (loadingIndicator) {
+                        loadingIndicator.classList.add('show');
+                        
+                        // Hide loading indicator after a short delay
+                        setTimeout(() => {
+                            loadingIndicator.classList.remove('show');
+                        }, 500);
+                    }
                 }
             });
         });
-    });
-    
-    // Add character functionality
-    if (addCharacterBtn) {
-        addCharacterBtn.addEventListener('click', () => {
-            console.log('Add character clicked');
-            createCharacterSelectionModal();
-        });
     }
     
-    // Reset map functionality
-    if (resetMapBtn) {
-        resetMapBtn.addEventListener('click', () => {
-            console.log('Reset map clicked');
-            resetActiveMap();
-        });
-    }
-    
-    function createCharacterSelectionModal() {
-        // Remove existing modal if present
-        const existingModal = document.querySelector('.character-selection-modal');
-        if (existingModal) {
-            document.body.removeChild(existingModal);
-        }
-        
-        // Create a new modal for character selection
-        const modal = document.createElement('div');
-        modal.className = 'character-selection-modal';
-        modal.innerHTML = `
-            <div class="character-selection-content">
-                <h3>Select Character Type</h3>
-                <div class="character-type-buttons">
-                    <button data-type="wizard"><i class="fas fa-hat-wizard"></i> Wizard</button>
-                    <button data-type="warrior"><i class="fas fa-shield-alt"></i> Warrior</button>
-                    <button data-type="ranger"><i class="fas fa-skull"></i> Ranger</button>
-                    <button data-type="rogue"><i class="fas fa-mask"></i> Rogue</button>
-                </div>
-                <button class="close-selection">Cancel</button>
-            </div>
-        `;
-        
-        document.body.appendChild(modal);
-        
-        // Add event listeners to the buttons
-        const typeButtons = modal.querySelectorAll('button[data-type]');
-        typeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const characterType = button.getAttribute('data-type');
-                addCharacterToMap(characterType);
-                document.body.removeChild(modal);
-            });
-        });
-        
-        // Add event listener to the close button
-        const closeButton = modal.querySelector('.close-selection');
-        closeButton.addEventListener('click', () => {
-            document.body.removeChild(modal);
-        });
-    }
-    
-    function addCharacterToMap(characterType) {
-        // Find the active map
-        const activeMap = document.querySelector('.game-map.active');
-        if (!activeMap) return;
-        
-        // Find markers container
-        const markersContainer = activeMap.querySelector('.map-markers');
-        if (!markersContainer) return;
-        
-        // Create a new marker
-        const marker = document.createElement('div');
-        marker.className = 'character-marker draggable';
-        marker.setAttribute('data-character', characterType);
-        
-        // Set an icon based on character type
-        let iconClass;
-        switch(characterType) {
-            case 'wizard': iconClass = 'fa-hat-wizard'; break;
-            case 'warrior': iconClass = 'fa-shield-alt'; break;
-            case 'ranger': iconClass = 'fa-skull'; break;
-            case 'rogue': iconClass = 'fa-mask'; break;
-            default: iconClass = 'fa-user-circle';
-        }
-        
-        marker.innerHTML = `<i class="fas ${iconClass}"></i>`;
-        
-        // Position in the center of the map
-        marker.style.left = '50%';
-        marker.style.top = '50%';
-        
-        // Add to the map
-        markersContainer.appendChild(marker);
-        
-        // Make it draggable
-        makeMarkerDraggable(marker);
-    }
-    
-    // Make addCharacterToMap function globally accessible
-    window.addCharacterToMap = addCharacterToMap;
-    
-    function resetActiveMap() {
-        // Find the active map
-        const activeMap = document.querySelector('.game-map.active');
-        if (!activeMap) return;
-        
-        // Get all markers except the default player marker
-        const customMarkers = activeMap.querySelectorAll('.character-marker:not([data-character="player1"])');
-        
-        // Remove them
-        customMarkers.forEach(marker => marker.remove());
-        
-        // Reset the default player marker to center
-        const defaultMarker = activeMap.querySelector('.character-marker[data-character="player1"]');
-        if (defaultMarker) {
-            defaultMarker.style.left = '50%';
-            defaultMarker.style.top = '50%';
-        }
-    }
-    
-    // Make existing markers draggable
-    function initializeMarkers() {
-        const markers = document.querySelectorAll('.character-marker.draggable');
-        markers.forEach(marker => {
-            makeMarkerDraggable(marker);
-        });
-    }
-    
-    // Make a marker draggable
+    // Make character markers draggable (implementation)
     function makeMarkerDraggable(marker) {
         let isDragging = false;
         let offsetX, offsetY;
@@ -162,20 +366,27 @@ document.addEventListener('DOMContentLoaded', () => {
         
         function startDrag(e) {
             e.preventDefault();
-            
             isDragging = true;
+            
+            // Add dragging class
             marker.classList.add('dragging');
             
             // Get mouse/touch position
-            const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-            const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+            let clientX, clientY;
+            if (e.type === 'touchstart') {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
             
-            // Calculate offset from marker center
+            // Calculate offset
             const rect = marker.getBoundingClientRect();
-            offsetX = clientX - rect.left;
-            offsetY = clientY - rect.top;
+            offsetX = clientX - (rect.left + rect.width / 2);
+            offsetY = clientY - (rect.top + rect.height / 2);
             
-            // Add document-level event listeners
+            // Add move and end event listeners
             document.addEventListener('mousemove', drag);
             document.addEventListener('touchmove', drag, { passive: false });
             document.addEventListener('mouseup', stopDrag);
@@ -184,35 +395,38 @@ document.addEventListener('DOMContentLoaded', () => {
         
         function drag(e) {
             if (!isDragging) return;
-            
             e.preventDefault();
             
-            // Get new position
-            const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-            const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+            // Get mouse/touch position
+            let clientX, clientY;
+            if (e.type === 'touchmove') {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
             
-            // Get map boundaries
-            const map = marker.closest('.game-map');
-            const mapRect = map.getBoundingClientRect();
+            // Get map container bounds
+            const mapContainer = marker.closest('.game-map');
+            const mapRect = mapContainer.getBoundingClientRect();
             
-            // Calculate position as percentage
-            const posX = (clientX - offsetX - mapRect.left + marker.offsetWidth / 2) / mapRect.width * 100;
-            const posY = (clientY - offsetY - mapRect.top + marker.offsetHeight / 2) / mapRect.height * 100;
+            // Calculate new position as percentage (for responsive positioning)
+            const posX = ((clientX - offsetX) - mapRect.left) / mapRect.width * 100;
+            const posY = ((clientY - offsetY) - mapRect.top) / mapRect.height * 100;
             
-            // Constrain to map boundaries
-            const boundedX = Math.min(Math.max(posX, 0), 100);
-            const boundedY = Math.min(Math.max(posY, 0), 100);
+            // Limit to map boundaries
+            const limitedX = Math.min(Math.max(posX, 0), 100);
+            const limitedY = Math.min(Math.max(posY, 0), 100);
             
-            // Update position
-            marker.style.left = boundedX + '%';
-            marker.style.top = boundedY + '%';
+            // Update marker position
+            marker.style.left = `${limitedX}%`;
+            marker.style.top = `${limitedY}%`;
         }
         
         function stopDrag() {
             isDragging = false;
             marker.classList.remove('dragging');
-            
-            // Remove document-level event listeners
             document.removeEventListener('mousemove', drag);
             document.removeEventListener('touchmove', drag);
             document.removeEventListener('mouseup', stopDrag);
@@ -220,61 +434,171 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Listen for new marker events from other scripts
-    document.addEventListener('newMarkerAdded', (event) => {
-        makeMarkerDraggable(event.detail.marker);
-    });
+    // Character selection modal
+    function showCharacterSelection() {
+        console.log('Showing character selection modal');
+        const modal = document.createElement('div');
+        modal.className = 'character-selection-modal';
+        modal.innerHTML = `
+            <div class="character-selection-content">
+                <h3>Select Character Type</h3>
+                <div class="character-type-buttons">
+                    <button data-character="wizard"><i class="fas fa-hat-wizard"></i>Wizard</button>
+                    <button data-character="warrior"><i class="fas fa-shield-alt"></i>Warrior</button>
+                    <button data-character="ranger"><i class="fas fa-skull"></i>Ranger</button>
+                    <button data-character="rogue"><i class="fas fa-mask"></i>Rogue</button>
+                </div>
+                <button class="close-selection">Cancel</button>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Handle character selection
+        const characterBtns = modal.querySelectorAll('[data-character]');
+        characterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const characterType = this.getAttribute('data-character');
+                addCharacterToMap(characterType);
+                modal.remove();
+            });
+        });
+        
+        // Handle close button
+        modal.querySelector('.close-selection').addEventListener('click', function() {
+            modal.remove();
+        });
+    }
     
-    // Initialize markers when DOM loads
-    initializeMarkers();
-    
-    // Resize map on window resize
-    function resizeMap() {
-        const mapContainer = document.querySelector('.map-container');
-        if (mapContainer) {
-            // For mobile screens, use a percentage of viewport height
-            if (window.innerWidth <= 767) {
-                mapContainer.style.height = '50vh';
-                return;
+    // Add character to active map
+    function addCharacterToMap(characterType) {
+        console.log(`Adding character to map: ${characterType}`);
+        
+        // Find active map
+        const activeMap = document.querySelector('.game-map.active');
+        if (activeMap) {
+            // Create new character marker
+            const marker = document.createElement('div');
+            marker.className = 'character-marker draggable';
+            marker.setAttribute('data-character', characterType);
+            
+            // Add icon based on character type
+            let iconClass;
+            switch(characterType) {
+                case 'wizard':
+                    iconClass = 'fa-hat-wizard';
+                    break;
+                case 'warrior':
+                    iconClass = 'fa-shield-alt';
+                    break;
+                case 'ranger':
+                    iconClass = 'fa-skull';
+                    break;
+                case 'rogue':
+                    iconClass = 'fa-mask';
+                    break;
+                default:
+                    iconClass = 'fa-user';
             }
             
-            // For larger screens
-            const viewportHeight = window.innerHeight;
-            const mapTop = mapContainer.getBoundingClientRect().top;
+            marker.innerHTML = `<i class="fas ${iconClass}"></i>`;
             
-            // Calculate available height (with padding)
-            const availableHeight = viewportHeight - mapTop - 40;
+            // Position marker in center of map initially
+            marker.style.left = '50%';
+            marker.style.top = '50%';
             
-            // Don't let it get too small
-            const minHeight = 400;
-            const finalHeight = Math.max(availableHeight, minHeight);
+            // Add to map
+            const mapMarkers = activeMap.querySelector('.map-markers');
+            mapMarkers.appendChild(marker);
             
-            // Apply the height, but don't let it get too large
-            const maxHeight = Math.min(finalHeight, viewportHeight * 0.65);
-            mapContainer.style.height = `${maxHeight}px`;
+            // Make the new marker draggable
+            makeMarkerDraggable(marker);
             
-            // Also resize session panel to match
-            const sessionPanel = document.getElementById('session-panel');
-            if (sessionPanel) {
-                sessionPanel.style.maxHeight = `${maxHeight}px`;
-            }
+            // Show notification
+            showNotification(`${characterType.charAt(0).toUpperCase() + characterType.slice(1)} added to map!`);
+        } else {
+            showNotification('No active map found! Please select a map.');
         }
     }
     
-    // Replace the existing resize event listeners with this
-    window.addEventListener('resize', () => {
-        resizeMap();
-    });
-    
-    window.addEventListener('load', () => {
-        resizeMap();
+    // Reset map (remove all character markers)
+    function resetMap() {
+        console.log('Resetting map');
         
-        // Also run after a short delay to ensure all elements are properly loaded
-        setTimeout(resizeMap, 200);
+        // Find active map
+        const activeMap = document.querySelector('.game-map.active');
+        if (activeMap) {
+            const mapName = activeMap.id.replace('-map', '');
+            
+            // Remove all character markers except the default player marker
+            const customMarkers = activeMap.querySelectorAll('.character-marker:not([data-character="player1"])');
+            customMarkers.forEach(marker => marker.remove());
+            
+            // Reset default markers to original position
+            const defaultMarkers = activeMap.querySelectorAll('.character-marker[data-character="player1"]');
+            defaultMarkers.forEach(marker => {
+                marker.style.left = '50%';
+                marker.style.top = '50%';
+            });
+            
+            showNotification(`Map "${mapName}" has been reset`);
+        } else {
+            showNotification('No active map found! Please select a map.');
+        }
+    }
+    
+    // Simple notification function
+    function showNotification(message) {
+        console.log(`Notification: ${message}`);
+        
+        // First check if we already have a notification element
+        let notification = document.querySelector('.notification');
+        
+        if (!notification) {
+            // Create notification element if it doesn't exist
+            notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `
+                <i class="fas fa-info-circle"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(notification);
+        } else {
+            // Update existing notification
+            notification.querySelector('span').textContent = message;
+        }
+        
+        // Show notification
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+        
+        // Hide after 3 seconds
+        setTimeout(() => {
+            notification.classList.remove('show');
+            // Remove after transition
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
+    
+    // Make these functions available globally
+    window.showNotification = showNotification;
+    window.addCharacterToMap = addCharacterToMap;
+    window.resetMap = resetMap;
+    window.makeMarkerDraggable = makeMarkerDraggable;
+    window.showCharacterSelection = showCharacterSelection;
+    
+    // Add listener for fullscreen toggle to ensure buttons stay functional
+    document.getElementById('fullscreenBtn')?.addEventListener('click', function() {
+        // Re-initialize buttons after entering fullscreen to ensure they work
+        setTimeout(attachButtonHandlers, 300);
     });
     
-    // Call resize after page navigation
-    document.addEventListener('pageChanged', () => {
-        setTimeout(resizeMap, 100);
+    // Also add a window load handler for additional button setup
+    window.addEventListener('load', function() {
+        console.log('Window load - reinitializing map buttons');
+        attachButtonHandlers();
     });
 });

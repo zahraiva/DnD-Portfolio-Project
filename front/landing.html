@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="landing.css">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;600;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="modal.css">
+    <link rel="stylesheet" href="map-container-fix.css">
 </head>
 <body>
     <div class="background-overlay"></div>
@@ -18,62 +20,108 @@
                 <span>Dungeons & Dragons</span>
             </div>
             <ul class="nav-links">
-                <li><a href="#home" class="active"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="#story"><i class="fas fa-book-open"></i> Story</a></li>
-                <li><a href="#map"><i class="fas fa-map-marked-alt"></i> Map</a></li>
-                <li><a href="#characters"><i class="fas fa-users"></i> Characters</a></li>
+                <li><a href="#" data-page="home" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" data-page="story"><i class="fas fa-book-open"></i> Story</a></li>
+                <li><a href="#" data-page="map"><i class="fas fa-map-marked-alt"></i> Map</a></li>
+                <li><a href="#" data-page="characters"><i class="fas fa-users"></i> Characters</a></li>
                 <li><a href="index.html" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section id="home" class="hero">
+        <!-- Home Page -->
+        <section id="home" class="page active">
             <div class="hero-content">
                 <h1>Enter a World of Wonders</h1>
                 <p>Discover Tales, Meet Legendary Heroes, Navigate Realms, and Let Our Chatbot Be Your Guide on Every Adventure!</p>
-                <a href="#story" class="cta-button">Begin Your Adventure</a>
+                <button class="cta-button" data-target="story">Begin Your Adventure</button>
             </div>
         </section>
 
-        <section id="story" class="story-section">
+        <!-- Story Page -->
+        <section id="story" class="page">
             <div class="section-content">
                 <h2>Epic Tales Await</h2>
                 <div class="story-cards">
-                    <div class="story-card">
-                        <i class="fas fa-crown"></i>
-                        <h3>The Lost Kingdom</h3>
-                        <p>Discover the mysteries of an ancient realm lost to time.</p>
+                    <div class="story-card" id="strahd-card">
+                        <i class="fas fa-skull"></i>
+                        <h3>Curse of Strahd</h3>
+                        <p>Enter the mist-shrouded realm of Barovia, where the vampire Count Strahd von Zarovich awaits.</p>
+                        <div class="story-img-container">
+                            <img src="images/strahd.jpg" alt="Curse of Strahd" class="story-img">
+                        </div>
+                        <span class="story-badge">Levels 1-10</span>
+                        <button class="story-details-btn" data-story="strahd">Learn More</button>
+                        <button class="view-map-btn" data-map="barovia">View Map</button>
                     </div>
-                    <div class="story-card">
-                        <i class="fas fa-dragon"></i>
-                        <h3>Dragon's Legacy</h3>
-                        <p>Face legendary creatures in epic battles.</p>
+                    <div class="story-card" id="phandelver-card">
+                        <i class="fas fa-gem"></i>
+                        <h3>Lost Mine of Phandelver</h3>
+                        <p>Discover the secrets of the legendary Wave Echo Cave and its magical Forge of Spells.</p>
+                        <div class="story-img-container">
+                            <img src="images/phandelver.jpg" alt="Lost Mine of Phandelver" class="story-img">
+                        </div>
+                        <span class="story-badge">Levels 1-5</span>
+                        <button class="story-details-btn" data-story="phandelver">Learn More</button>
+                        <button class="view-map-btn" data-map="phandelver">View Map</button>
                     </div>
                     <div class="story-card">
                         <i class="fas fa-magic"></i>
-                        <h3>Magical Realms</h3>
-                        <p>Explore lands filled with powerful magic and ancient secrets.</p>
+                        <h3>Create Your Own</h3>
+                        <p>Craft a unique adventure with our tools and bring your imagination to life.</p>
+                        <button class="story-create-btn">Start Creating</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="map" class="map-section">
-            <div class="section-content">
-                <h2>Explore the Lands</h2>
+        <!-- Map Page -->
+        <section id="map" class="page">
+            <h2>Interactive Maps</h2>
+            
+            <div class="map-selector">
+                <div class="map-tabs-container">
+                    <div class="map-tabs">
+                        <button class="map-tab active" data-map="barovia">Barovia</button>
+                        <button class="map-tab" data-map="phandelver">Phandelver</button>
+                    </div>
+                </div>
+                
+                <!-- Map loading indicator -->
                 <div class="map-container">
-                    <div class="map-preview">
-                        <i class="fas fa-compass"></i>
-                        <h3>Interactive World Map</h3>
-                        <p>Navigate through mysterious forests, treacherous mountains, and magical cities.</p>
-                        <button class="map-button">Open World Map</button>
+                    <button class="map-control-btn add-character-btn"><i class="fas fa-user-plus"></i> Add Character</button>
+                    <button class="map-control-btn reset-map-btn"><i class="fas fa-undo"></i> Reset Map</button>
+                    <button class="fullscreen-btn" id="fullscreenBtn"><i class="fas fa-expand"></i></button>
+                    
+                    <div class="map-loading">
+                        <i class="fas fa-spinner"></i> Loading map...
+                    </div>
+                    
+                    <div id="barovia-map" class="game-map active">
+                        <img src="images/barovia.webp" alt="Map of Barovia" class="map-base-img">
+                        <div class="map-markers">
+                            <div class="character-marker draggable" data-character="player1" style="left: 50%; top: 50%;">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="phandelver-map" class="game-map">
+                        <img src="images/phandelver.webp" alt="Map of Phandelver" class="map-base-img" 
+                             onload="this.setAttribute('data-loaded', 'true');">
+                        <div class="map-markers">
+                            <div class="character-marker draggable" data-character="player1" style="left: 50%; top: 50%;">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="characters" class="characters-section">
+        <!-- Characters Page -->
+        <section id="characters" class="page">
             <div class="section-content">
                 <h2>Meet the Heroes</h2>
                 <div class="character-cards">
@@ -81,33 +129,88 @@
                         <div class="character-icon"><i class="fas fa-hat-wizard"></i></div>
                         <h3>Wizards</h3>
                         <p>Masters of arcane magic</p>
+                        <button class="add-to-map-btn" data-character="wizard">Add to Map</button>
                     </div>
                     <div class="character-card">
                         <div class="character-icon"><i class="fas fa-shield-alt"></i></div>
                         <h3>Warriors</h3>
                         <p>Brave defenders of the realm</p>
-                    </div>
-                    <div class="character-card">
-                        <div class="character-icon"><i class="fas fa-bow-arrow"></i></div>
-                        <h3>Rangers</h3>
-                        <p>Skilled hunters and trackers</p>
+                        <button class="add-to-map-btn" data-character="warrior">Add to Map</button>
                     </div>
                     <div class="character-card">
                         <div class="character-icon"><i class="fas fa-skull"></i></div>
+                        <h3>Rangers</h3>
+                        <p>Skilled hunters and trackers</p>
+                        <button class="add-to-map-btn" data-character="ranger">Add to Map</button>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-icon"><i class="fas fa-mask"></i></div>
                         <h3>Rogues</h3>
                         <p>Masters of stealth and cunning</p>
+                        <button class="add-to-map-btn" data-character="rogue">Add to Map</button>
                     </div>
                 </div>
             </div>
         </section>
-
-
     </main>
 
-
+    <!-- Story Details Modal -->
+    <div id="storyDetailsModal" class="modal">
+        <div class="modal-content story-modal-content">
+            <span class="close">&times;</span>
+            <div id="strahd-details" class="story-details" style="display: none;">
+                <h2>Curse of Strahd</h2>
+                <div class="story-header">
+                    <div class="story-img-large">
+                        <img src="images/strahd-large.jpg" alt="Curse of Strahd">
+                    </div>
+                    <div class="story-info">
+                        <p><strong>Difficulty:</strong> Challenging</p>
+                        <p><strong>Level Range:</strong> 1-10</p>
+                        <p><strong>Setting:</strong> Gothic Horror</p>
+                        <p><strong>Featured Creatures:</strong> Vampires, Werewolves, Ghosts, Zombies</p>
+                    </div>
+                </div>
+                <div class="story-description">
+                    <p>Under raging storm clouds, the vampire Count Strahd von Zarovich stands silhouetted against the ancient walls of Castle Ravenloft. Rumbling thunder pounds the castle spires. The wind's howling increases as he turns his gaze down toward the village of Barovia.</p>
+                    <p>Far below, yet not beyond his keen eyesight, a party of adventurers has just entered his domain. Strahd's face forms the barest hint of a smile as his dark plan unfolds. He knew they were coming, and he knows why they came — all according to his plan.</p>
+                    <p>A lightning flash rips through the darkness, but Strahd is gone. Only the howling of the wind fills the midnight air. The master of Castle Ravenloft is having guests for dinner. And you are invited.</p>
+                </div>
+                <div class="story-buttons">
+                    <button class="cta-button start-adventure-btn">Begin This Adventure</button>
+                    <button class="view-map-btn" data-map="barovia">View Map</button>
+                </div>
+            </div>
+            
+            <div id="phandelver-details" class="story-details" style="display: none;">
+                <h2>Lost Mine of Phandelver</h2>
+                <div class="story-header">
+                    <div class="story-img-large">
+                        <img src="images/phandelver-large.jpg" alt="Lost Mine of Phandelver">
+                    </div>
+                    <div class="story-info">
+                        <p><strong>Difficulty:</strong> Beginner-friendly</p>
+                        <p><strong>Level Range:</strong> 1-5</p>
+                        <p><strong>Setting:</strong> Classic Fantasy</p>
+                        <p><strong>Featured Creatures:</strong> Goblins, Bugbears, Nothic, Black Spider</p>
+                    </div>
+                </div>
+                <div class="story-description">
+                    <p>More than five hundred years ago, clans of dwarves and gnomes made an agreement known as the Phandelver's Pact, by which they would share a rich mine in a wondrous cavern known as Wave Echo Cave. In addition to its mineral wealth, the mine contained great magical power.</p>
+                    <p>Human spellcasters allied themselves with the dwarves and gnomes to channel and bind that energy into a great forge called the Forge of Spells, where magic items could be crafted. Times were good, and the nearby human town of Phandalin prospered as well.</p>
+                    <p>But then disaster struck when orcs swept through the North and laid waste to all in their path. A powerful force of orcs reinforced by evil mercenary wizards attacked Wave Echo Cave to seize its riches and magic treasures. The ensuing battle destroyed much of the cavern. Few survived, and the location of Wave Echo Cave was lost.</p>
+                    <p>For centuries, rumors of buried riches have attracted treasure seekers and opportunists to the area around Phandalin, but no one has ever succeeded in locating the lost mine.</p>
+                </div>
+                <div class="story-buttons">
+                    <button class="cta-button start-adventure-btn">Begin This Adventure</button>
+                    <button class="view-map-btn" data-map="phandelver">View Map</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Create Game Modal -->
-    <div id="createGameModal" class="modal" style="display: none;">
+    <div id="createGameModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Create New Game</h2>
@@ -130,28 +233,22 @@
                                 <option value="rogue">Rogue</option>
                                 <option value="cleric">Cleric</option>
                             </select>
-                            <button type="button" class="add-details-btn">Add Skills & Items</button>
+                            <div class="character-buttons">
+                                <button type="button" class="add-details-btn">Add Skills</button>
+                                <button type="button" class="add-items-btn">Add Items</button>
+                            </div>
                         </div>
                     </div>
-                    <button type="button" id="addCharacterBtn" class="secondary-btn">+ Add Character</button>
+                    <button type="button" id="addCharacterBtn" class="secondary-btn"><i class="fas fa-plus"></i> Add Character</button>
                 </div>
-
                 <div class="form-section">
-                    <h3>Story & Map</h3>
+                    <h3>Story</h3>
                     <select id="storySelect" required>
                         <option value="">Select Story</option>
-                        <option value="lost-mines">Lost Mines of Phandelver</option>
+                        <option value="lost-mines">Lost Mine of Phandelver</option>
                         <option value="curse-strahd">Curse of Strahd</option>
-                        <option value="dragon-heist">Waterdeep: Dragon Heist</option>
-                    </select>
-                    <select id="mapSelect" required>
-                        <option value="">Select Map</option>
-                        <option value="sword-coast">Sword Coast</option>
-                        <option value="barovia">Barovia</option>
-                        <option value="waterdeep">Waterdeep</option>
                     </select>
                 </div>
-
                 <button type="submit" class="submit-btn">Create Game</button>
             </form>
         </div>
@@ -161,32 +258,33 @@
     <div id="characterDetailsModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Character Details</h2>
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="skills">Skills</button>
-                <button class="tab-btn" data-tab="inventory">Inventory</button>
-            </div>
-            <div class="tab-content" id="skillsTab">
-                <div class="skills-grid">
-                    <label><input type="checkbox"> Acrobatics</label>
-                    <label><input type="checkbox"> Animal Handling</label>
-                    <label><input type="checkbox"> Arcana</label>
-                    <label><input type="checkbox"> Athletics</label>
-                    <label><input type="checkbox"> Deception</label>
-                    <label><input type="checkbox"> History</label>
+            <h2>Character Skills</h2>
+            <p class="help-text">Enter your character skills below (one per line)</p>
+            <textarea id="skillsTextarea" rows="10" placeholder="Athletics&#10;Stealth&#10;Arcana&#10;Perception&#10;Add more skills..."></textarea>
+            <div class="skills-preview">
+                <h3>Preview</h3>
+                <div id="skillsPreview" class="skills-grid">
+                    <!-- Skills will appear here -->
                 </div>
             </div>
-            <div class="tab-content" id="inventoryTab" style="display: none;">
-                <div class="inventory-list">
-                    <div class="inventory-item">
-                        <input type="text" placeholder="Item Name">
-                        <input type="number" placeholder="Quantity" min="1">
-                        <button type="button" class="remove-item">×</button>
-                    </div>
+            <button class="submit-btn" id="saveSkillsBtn">Save Skills</button>
+        </div>
+    </div>
+
+    <!-- Character Items Modal -->
+    <div id="characterItemsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Character Items</h2>
+            <p class="help-text">Enter your character items below (one per line)</p>
+            <textarea id="itemsTextarea" rows="10" placeholder="Sword&#10;Shield&#10;Health Potion&#10;Rope&#10;Add more items..."></textarea>
+            <div class="items-preview">
+                <h3>Preview</h3>
+                <div id="itemsPreview" class="items-grid">
+                    <!-- Items will appear here -->
                 </div>
-                <button type="button" id="addItemBtn" class="secondary-btn">+ Add Item</button>
             </div>
-            <button class="submit-btn">Save Details</button>
+            <button class="submit-btn" id="saveItemsBtn">Save Items</button>
         </div>
     </div>
 
@@ -194,16 +292,19 @@
     <div id="myGamesModal" class="modal">
         <div class="modal-content games-modal-content">
             <span class="close">&times;</span>
-            <h2>Saved Games</h2>
+            <h2>Your Saved Games</h2>
+            <p class="modal-description">Continue your adventures or start a new campaign.</p>
             <div class="games-grid" id="gamesGrid">
                 <!-- Games will be added here dynamically -->
             </div>
         </div>
     </div>
 
+    <!-- Game Buttons -->
     <button id="myGamesBtn" class="game-btn saved-games-btn"><i class="fas fa-save"></i> Saved Games</button>
     <button id="createGameBtn" class="game-btn create-game-btn"><i class="fas fa-plus"></i> Create Game</button>
 
+    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -232,54 +333,14 @@
             <p>&copy; 2024 Realm of Adventures. All rights reserved.</p>
         </div>
     </footer>
-    <script>
-        // Get all sections and navigation links
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.nav-links a');
 
-        // Function to update active link
-        function updateActiveLink() {
-            let current = '';
-
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').substring(1) === current) {
-                    link.classList.add('active');
-                }
-            });
-        }
-
-        // Update active link on scroll
-        window.addEventListener('scroll', updateActiveLink);
-
-        // Smooth scroll and update active link on click
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                if (!this.classList.contains('login-btn')) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetSection = document.getElementById(targetId);
-                    targetSection.scrollIntoView({ behavior: 'smooth' });
-
-                    // Update active class
-                    navLinks.forEach(link => link.classList.remove('active'));
-                    this.classList.add('active');
-                }
-            });
-        });
-
-        // Set active link on page load
-        updateActiveLink();
-    </script>
-    <script src="game.js"></script>
+    <!-- Import script files -->
+    <script src="landing.js"></script>
+    <script src="map.js"></script>
+    <script src="story.js"></script>
     <script src="saved-games.js"></script>
+    <script src="navigation.js"></script>
+    <script src="game.js"></script>
+    <script src="button-fixer.js"></script>
 </body>
 </html>

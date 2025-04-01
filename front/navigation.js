@@ -162,11 +162,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Switch to map page
                 showPage('map');
-            } else {
-                alert('Please select a map first!');
                 
-                // Switch to map page first
+                // Show notification
+                if (window.showNotification) {
+                    window.showNotification(`${characterType.charAt(0).toUpperCase() + characterType.slice(1)} added to map!`);
+                }
+            } else {
+                // Switch to map page first instead of showing alert
                 showPage('map');
+                
+                // Show notification
+                if (window.showNotification) {
+                    window.showNotification('Please select a map first. Character will be added after you select a map.');
+                }
             }
         });
     });
@@ -297,4 +305,86 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    
+    // Ensure the navigation function is available globally
+    // Make navigation function available globally with more robust implementation
+    window.showPage = function(pageId, options = {}) {
+        console.log(`Navigating to page: ${pageId}`, options);
+        
+        // Remove active class from all links
+        const navLinks = document.querySelectorAll('.nav-links a');
+        navLinks.forEach(link => link.classList.remove('active'));
+        
+        // Add active class to the corresponding link
+        const activeLink = document.querySelector(`.nav-links a[data-page="${pageId}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+        
+        // Hide all pages
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(page => page.classList.remove('active'));
+        
+        // Show the selected page
+        const activePage = document.getElementById(pageId);
+        if (activePage) {
+            activePage.classList.add('active');
+            
+            // Special handling for map page
+            if (pageId === 'map' && options.mapId) {
+                console.log(`Selecting map: ${options.mapId}`);
+                
+                // Slight delay to ensure page is visible first
+                setTimeout(() => {
+                    const mapTab = document.querySelector(`.map-tab[data-map="${options.mapId}"]`);
+                    if (mapTab) {
+                        // Manually trigger the map tab click
+                        mapTab.click();
+                    }
+                }, 100);
+            }
+        }
+    };
+
+    // Handle fullscreen toggle for maps
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+    if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', function() {
+            const mapContainer = document.querySelector('.map-container');
+            
+            if (mapContainer.classList.contains('fullscreen')) {
+                // Exit fullscreen
+                mapContainer.classList.remove('fullscreen');
+                this.innerHTML = '<i class="fas fa-expand"></i>';
+                document.body.style.overflow = '';
+            } else {
+                // Enter fullscreen
+                mapContainer.classList.add('fullscreen');
+                this.innerHTML = '<i class="fas fa-compress"></i>';
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Trigger resize event to adjust map container
+            setTimeout(() => {
+                window.dispatchEvent(new Event('resize'));
+            }, 100);
+        });
+    }
+    
+    // Escape key to exit fullscreen map
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const mapContainer = document.querySelector('.map-container.fullscreen');
+            if (mapContainer) {
+                mapContainer.classList.remove('fullscreen');
+                document.getElementById('fullscreenBtn').innerHTML = '<i class="fas fa-expand"></i>';
+                document.body.style.overflow = '';
+                
+                // Trigger resize event to adjust map container
+                setTimeout(() => {
+                    window.dispatchEvent(new Event('resize'));
+                }, 100);
+            }
+        }
+    });
 });
