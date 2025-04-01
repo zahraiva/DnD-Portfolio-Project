@@ -11,6 +11,8 @@ from datetime import timedelta
 from fastapi import HTTPException
 from backend.schemas.auth import SignupResponse, LoginResponse, SignupRequest
 from sqlalchemy.future import select
+from sqlalchemy.exc import NoResultFound
+from sqlalchemy import select
 from sqlalchemy import update
 
 class DungeonMasterFacade:
@@ -203,3 +205,28 @@ class DungeonMasterFacade:
 
     async def roll_dice(self):
         return random.randint(1, 20)
+    
+    async def update_game_session_state(self, db: AsyncSession, game_session_id: str, new_story: str):
+
+        try:
+            # Fetch the game session by ID
+            game_session = await self.dungeon_master_repo.get(db, GameSession, game_session_id)
+
+            if not game_session:
+                raise HTTPException(status_code=404, detail="Game session not found")
+
+            # Update the story field
+            game_session.state = game_session.state or {}
+            game_session.state["story"] = new_story
+
+            # Commit the changes to the database
+            await db.commit()
+            await db.refresh(game_session)
+
+            return game_session
+
+        except NoResultFound:
+            raise HTTPException(status_code=404, detail="Game session not found")
+        except Exception as e:
+            await db.rollback()
+            raise HTTPException(status_code=500, detail=f"Error updating game session: {str(e)}")

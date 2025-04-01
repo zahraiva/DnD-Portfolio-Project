@@ -67,7 +67,7 @@ async def continue_story(game_session_id: str, db: AsyncSession = Depends(get_db
 
     try:
         # Use client.chat.completions.create for the latest OpenAI library
-        response = await client.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",  # Use a GPT-3.5 or GPT-4 model
             messages=[
                 {"role": "system", "content": "You are a Dungeon Master continuing a D&D adventure."},
@@ -76,11 +76,12 @@ async def continue_story(game_session_id: str, db: AsyncSession = Depends(get_db
             temperature=0.7,  # Adjust the creativity level
             max_tokens=150,  # Adjust the token limit as needed
         )
-        ai_response = response["choices"][0]["message"]["content"].strip()  # Extract the response text
+        # Correctly access the response content
+        ai_response = response.choices[0].message.content.strip()  # Access the content attribute directly
 
         await facades.update_game_session_state(db, game_session_id, ai_response)
 
-        return {"session_id": game_session_id, "story": ai_response}
+        return {"game_session_id": game_session_id, "story": ai_response}
 
     except OpenAIError as e:
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=f"OpenAI API error: {e}")
