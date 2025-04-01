@@ -127,7 +127,7 @@ main {
     min-height: calc(100vh - 70px); /* Maintain minimum height for content */
     position: relative;
     margin-top: 70px;
-    padding-bottom: 120px; /* Add padding at bottom to prevent footer overlap */
+    padding-bottom: 150px; /* Increased padding at bottom to prevent footer overlap */
     overflow-y: visible; /* Allow scrolling within main content */
 }
 
@@ -612,6 +612,26 @@ h2 {
 .character-details-container {
     width: 100%;
     max-width: 1000px;
+    max-height: calc(100vh - 250px); /* Adjust height to leave space for footer */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding-right: 10px; /* Add padding for scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) rgba(10, 31, 18, 0.5);
+}
+
+/* Scrollbar styling for character details container */
+.character-details-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.character-details-container::-webkit-scrollbar-track {
+    background: rgba(10, 31, 18, 0.5);
+    border-radius: 10px;
+}
+
+.character-details-container::-webkit-scrollbar-thumb {
+    background-color: var(--accent);
+    border-radius: 10px;
 }
 
 .character-details {
@@ -619,10 +639,38 @@ h2 {
     border-radius: 10px;
     padding: 2rem;
     margin-top: 2rem;
+    margin-bottom: 2rem; /* Add space at bottom */
     border: 1px solid rgba(76, 175, 80, 0.2);
+    position: relative;
+}
+
+.back-to-classes-btn {
+    background: var(--accent);
+    color: var(--text-dark);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    width: fit-content;
+}
+
+.back-to-classes-btn:hover {
+    background: var(--accent-light);
+    transform: translateX(-5px);
+}
+
+.back-to-classes-btn i {
+    font-size: 0.9rem;
 }
 
 .character-list {
+    padding-bottom: 10px; /* Add padding at bottom of list */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
@@ -725,9 +773,10 @@ footer {
     background: var(--primary-dark); /* Keeping original color */
     padding: 1rem 1rem 0.5rem; /* Reduced padding significantly */
     border-top: 1px solid rgba(76, 175, 80, 0.1);
-    z-index: 10;
+    z-index: 100; /* Higher z-index to ensure it stays above other content */
     clear: both; /* Ensure it clears any floated content */
     margin-top: auto; /* Push to bottom */
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2); /* Add shadow for visual separation */
 }
 
 .footer-content {
