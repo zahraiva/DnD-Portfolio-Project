@@ -2,7 +2,7 @@
     --primary-dark: #0a1f12;
     --primary: #1a3320;
     --primary-light: #2d4a35;
-    --accent: #7ac67d;
+    --accent: #72be99;
     --accent-light: #81C784;
     --text-light: #E8F5E9;
     --text-dark: #1B5E20;
@@ -12,10 +12,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    user-select: none;
 }
 
 html, body {
-    height: 100%;
     margin: 0;
     padding: 0;
     overflow-x: hidden; /* Prevent horizontal scroll */
@@ -46,22 +46,20 @@ body {
 
 /* Header & Navigation */
 header {
-    position: fixed;
+    position: sticky;
     top: 0;
     width: 100%;
-    background: rgba(10, 31, 18, 0.85);
+    background: rgba(5, 32, 29, 0.7);
     backdrop-filter: blur(5px);
     z-index: 1000;
-    border-bottom: 1px solid rgba(76, 175, 80, 0.2);
 }
 
 nav {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
+    padding: 1rem 3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
 }
 
 .logo {
@@ -81,6 +79,11 @@ nav {
     display: flex;
     gap: 2rem;
     list-style: none;
+    justify-content: space-between;
+    margin: 0 auto;
+    position: absolute;
+    transform: translateX(-50%);
+    left: 50%;
 }
 
 .nav-links a {
@@ -120,15 +123,24 @@ nav {
 .login-btn {
     background: rgba(122, 198, 125, 0.1);
     border: 1px solid var(--accent);
+    padding: 0.4rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-light);
 }
 
 /* Page Structure */
 main {
-    min-height: calc(100vh - 70px); /* Maintain minimum height for content */
-    position: relative;
-    margin-top: 70px;
-    padding-bottom: 150px; /* Increased padding at bottom to prevent footer overlap */
+    position: relative; /* Increased padding at bottom to prevent footer overlap */
     overflow-y: visible; /* Allow scrolling within main content */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
 }
 
 .page {
@@ -170,7 +182,7 @@ main {
     font-size: 4rem;
     margin-bottom: 1.5rem;
     color: var(--accent);
-    text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.3), 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 #home p {
@@ -218,12 +230,19 @@ h2 {
     margin-bottom: 2rem;
     text-align: center;
     color: var(--accent);
+    position: relative;
+    z-index: 2;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* Story Page */
 #story .section-content {
     justify-content: center;
     padding: 2rem 0;
+}
+
+#story h2 {
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .story-cards {
@@ -300,6 +319,7 @@ h2 {
     margin-bottom: 1rem;
     color: var(--accent-light);
     font-size: 1.4rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .story-details-btn, .story-create-btn, .view-map-btn {
@@ -339,7 +359,8 @@ h2 {
 }
 
 #map h2 {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .map-selector {
@@ -531,10 +552,17 @@ h2 {
 }
 
 /* Characters Page */
+#characters {
+    border: 1px solid red;
+}
 #characters .section-content {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+
+#characters h2 {
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .class-selection {
@@ -612,7 +640,6 @@ h2 {
 .character-details-container {
     width: 100%;
     max-width: 1000px;
-    max-height: calc(100vh - 250px); /* Adjust height to leave space for footer */
     overflow-y: auto; /* Enable vertical scrolling */
     padding-right: 10px; /* Add padding for scrollbar */
     scrollbar-width: thin;
@@ -638,8 +665,7 @@ h2 {
     background: rgba(10, 31, 18, 0.6);
     border-radius: 10px;
     padding: 2rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem; /* Add space at bottom */
+    margin: 2rem 0;
     border: 1px solid rgba(76, 175, 80, 0.2);
     position: relative;
 }
@@ -788,9 +814,10 @@ h2 {
 }
 
 .character-modal-info h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
+    font-family: 'MedievalSharp', cursive;
     color: var(--accent);
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .character-modal-info p {
@@ -838,6 +865,7 @@ h2 {
     color: var(--accent);
     font-size: 1.3rem;
     margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .character-info p {
@@ -870,6 +898,7 @@ h2 {
     font-family: 'Cinzel', serif;
     margin-bottom: 0.5rem;
     color: var(--accent-light);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .add-to-map-btn {
@@ -891,12 +920,10 @@ h2 {
 
 /* Footer */
 footer {
-    position: relative; /* Keep it in document flow */
     width: 100%;
     background: var(--primary-dark); /* Keeping original color */
     padding: 1rem 1rem 0.5rem; /* Reduced padding significantly */
-    border-top: 1px solid rgba(76, 175, 80, 0.1);
-    z-index: 100; /* Higher z-index to ensure it stays above other content */
+    border-top: 1px solid rgba(76, 175, 80, 0.1); /* Higher z-index to ensure it stays above other content */
     clear: both; /* Ensure it clears any floated content */
     margin-top: auto; /* Push to bottom */
     box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2); /* Add shadow for visual separation */
@@ -961,6 +988,15 @@ footer {
     color: var(--text-light); /* Ensure text is white */
 }
 
+.footer-links {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links>li>a {
+    text-decoration: none;
+}
 /* Optimize footer for mobile even further */
 @media (max-width: 768px) {
     footer {
@@ -1413,10 +1449,10 @@ footer {
 }
 
 .form-section h3 {
+    font-family: 'MedievalSharp', cursive;
     color: var(--accent);
-    margin-bottom: 15px;
-    font-family: 'Cinzel', serif;
-    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 input[type="text"],
@@ -1652,9 +1688,10 @@ select:focus {
 }
 
 .skills-preview h3 {
+    font-family: 'MedievalSharp', cursive;
     color: var(--accent);
-    margin-bottom: 15px;
-    font-family: 'Cinzel', serif;
+    margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* Modified skills grid for the preview */
@@ -2400,9 +2437,10 @@ select:focus {
 }
 
 .items-preview h3 {
+    font-family: 'MedievalSharp', cursive;
     color: #5279b1;
     margin-bottom: 15px;
-    font-family: 'Cinzel', serif;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* Items grid for the preview */
