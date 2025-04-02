@@ -155,7 +155,10 @@ main {
     transition: opacity 0.3s ease;
     overflow-y: auto; /* Allow each page to scroll independently */
 }
-
+.page-home, .page-story, .page-map, .page-characters {
+    position: relative;
+    position: static;
+}
 .page.active {
     display: flex;
     flex-direction: column;
