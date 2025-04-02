@@ -188,11 +188,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             // 7. Show notification
-            notify(`Continuing "${game.name || 'Untitled Adventure'}"...`);
+            notify(`Continuing "${game.name || 'Untitled Adventure'}" with ${game.characters.length} characters...`);
             
             // 8. Select the correct map tab after a little delay
             setTimeout(() => {
-                const mapId = game.map || 'barovia';
+                const mapId = game.story || game.map || 'barovia';
                 const mapTab = document.querySelector(`.map-tab[data-map="${mapId}"]`);
                 
                 if (mapTab) {
@@ -209,6 +209,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (targetMap) {
                         targetMap.classList.add('active');
                         targetMap.style.display = 'block';
+                    }
+                    
+                    // Clear any existing character containers
+                    const existingCharContainer = document.querySelector('.map-characters-container');
+                    if (existingCharContainer) {
+                        existingCharContainer.remove();
                     }
                     
                     // Load characters after a delay to ensure map is ready
@@ -531,6 +537,12 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Clear existing markers
         markersContainer.innerHTML = '';
+        
+        // Clear any existing character containers
+        const existingCharContainer = document.querySelector('.map-characters-container');
+        if (existingCharContainer) {
+            existingCharContainer.remove();
+        }
         
         // Create the characters container
         const charactersContainer = document.createElement('div');
