@@ -1,6 +1,8 @@
 import random
 from typing import List
 from sqlalchemy.orm.attributes import flag_modified
+from sqlalchemy.util import await_only
+
 from backend.persistance.repository import DungeonMasterRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 from backend.models import DungeonMaster, Character, Story, GameSession, CharacterAction, GameCharacter
@@ -44,6 +46,9 @@ class DungeonMasterFacade:
         )
 
         return LoginResponse(access_token=access_token, token_type="bearer")
+
+    async def get_dungeon_master_by_email(self, db: AsyncSession, email: str):
+        return await self.dungeon_master_repo.get_by_attribute(db, DungeonMaster, "email", email)
 
     async def create_character(self, db: AsyncSession, name: str, class_type: str, skills: str, dungeon_master_id: str):
         return await self.dungeon_master_repo.create(db, Character, name=name, class_type=class_type, skills=skills, dungeon_master_id=dungeon_master_id)

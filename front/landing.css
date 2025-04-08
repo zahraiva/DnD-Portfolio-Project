@@ -16,6 +16,7 @@
 }
 
 html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
     overflow-x: hidden; /* Prevent horizontal scroll */
@@ -46,7 +47,7 @@ body {
 
 /* Header & Navigation */
 header {
-    position: sticky;
+    position: fixed;
     top: 0;
     width: 100%;
     background: rgba(5, 32, 29, 0.7);
@@ -134,12 +135,16 @@ nav {
 
 /* Page Structure */
 main {
-    position: relative; /* Increased padding at bottom to prevent footer overlap */
+    min-height: calc(100vh - 70px); /* Maintain minimum height for content */
+    position: relative;
+    margin-top: 70px;
+    padding-bottom: 150px; /* Increased padding at bottom to prevent footer overlap */
+    /* position: relative; Increased padding at bottom to prevent footer overlap */
     overflow-y: visible; /* Allow scrolling within main content */
-    min-height: 100vh;
+    /* min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-between; */
     
 }
 
@@ -155,10 +160,7 @@ main {
     transition: opacity 0.3s ease;
     overflow-y: auto; /* Allow each page to scroll independently */
 }
-.page-home, .page-story, .page-map, .page-characters {
-    position: relative;
-    position: static;
-}
+
 .page.active {
     display: flex;
     flex-direction: column;
@@ -172,7 +174,7 @@ main {
     align-items: center;
     justify-content: center;
     text-align: center;
-    margin-top: 250px;
+    /* margin-top: 250px; */
 }
 
 .hero-content {
@@ -555,9 +557,9 @@ h2 {
 }
 
 /* Characters Page */
-#characters {
+/* #characters {
     border: 1px solid red;
-}
+} */
 #characters .section-content {
     justify-content: center;
     align-items: center;
@@ -643,6 +645,7 @@ h2 {
 .character-details-container {
     width: 100%;
     max-width: 1000px;
+    max-height: calc(100vh - 250px);
     overflow-y: auto; /* Enable vertical scrolling */
     padding-right: 10px; /* Add padding for scrollbar */
     scrollbar-width: thin;
@@ -668,7 +671,8 @@ h2 {
     background: rgba(10, 31, 18, 0.6);
     border-radius: 10px;
     padding: 2rem;
-    margin: 2rem 0;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     border: 1px solid rgba(76, 175, 80, 0.2);
     position: relative;
 }
@@ -817,6 +821,8 @@ h2 {
 }
 
 .character-modal-info h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
     font-family: 'MedievalSharp', cursive;
     color: var(--accent);
     margin-bottom: 1rem;
@@ -923,10 +929,13 @@ h2 {
 
 /* Footer */
 footer {
+    position: relative;
     width: 100%;
     background: var(--primary-dark); /* Keeping original color */
     padding: 1rem 1rem 0.5rem; /* Reduced padding significantly */
-    border-top: 1px solid rgba(76, 175, 80, 0.1); /* Higher z-index to ensure it stays above other content */
+    border-top: 1px solid rgba(76, 175, 80, 0.1);
+    z-index: 100;
+    /* border-top: 1px solid rgba(76, 175, 80, 0.1); Higher z-index to ensure it stays above other content */
     clear: both; /* Ensure it clears any floated content */
     margin-top: auto; /* Push to bottom */
     box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2); /* Add shadow for visual separation */
@@ -1454,7 +1463,10 @@ footer {
 .form-section h3 {
     font-family: 'MedievalSharp', cursive;
     color: var(--accent);
-    margin-bottom: 1rem;
+    margin-bottom: 15px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    /* margin-bottom: 1rem; */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 

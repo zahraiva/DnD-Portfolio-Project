@@ -24,6 +24,9 @@ pymysql = "^1.1.1"
 openai = "^1.69.0"
 cryptography = "^44.0.2"
 python-dotenv = "^1.1.0"
+redis = "^5.2.1"
+aiosmtplib = "^4.0.0"
+aioredis = "^2.0.1"
 
 
 [build-system]

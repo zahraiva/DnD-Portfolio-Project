@@ -78,6 +78,9 @@ async def continue_story(game_session_id: str, db: AsyncSession = Depends(get_db
 
         ai_response = response.choices[0].message.content.strip()
 
+        if "end game" in ai_response.lower():
+            await facades.end_game_session(db, game_session_id)
+
         await facades.update_game_session_state(db, game_session_id, ai_response)
 
         return {"game_session_id": game_session_id, "story": ai_response}

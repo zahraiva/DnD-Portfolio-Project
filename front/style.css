@@ -15,13 +15,16 @@
 }
 
 body {
-    margin: 0;
+    /* margin: 0; */
+    margin-bottom: -20%;
     min-height: 100vh;
-    width: 100%;
+    /* width: 100%; */
+    width: 100vw;
     background-image: url('images/backg.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
