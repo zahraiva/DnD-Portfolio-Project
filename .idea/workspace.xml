@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3de448a3-bcfc-4e20-99b0-9f3fc9242a69" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api/v1/character.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/v1/character.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/api/v1/character_action.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/api/v1/character_action.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service/facade.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/facade.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/landing.css" beforeDir="false" afterPath="$PROJECT_DIR$/front/landing.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front/map.css" beforeDir="false" afterPath="$PROJECT_DIR$/front/map.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

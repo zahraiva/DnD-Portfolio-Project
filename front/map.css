@@ -85,7 +85,69 @@
     transition: opacity 0.3s ease;
     pointer-events: none;
 }
+/* Map Page */
+#map {
+    justify-content: flex-start !important;
+    padding: 20px 20px 120px !important; /* Add padding at bottom for footer */
+    overflow-y: auto !important; /* Ensure the map page itself can scroll */
+    height: 100%;
+}
 
+.map-selector {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    height: auto; /* Allow natural height */
+    min-height: calc(100% - 80px); /* Allow content to determine height */
+}
+
+.map-tabs-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.map-tabs {
+    display: flex;
+    background: rgba(10, 31, 18, 0.8);
+    padding: 6px;
+    border-radius: 50px;
+    border: 1px solid var(--accent);
+}
+
+.map-tab {
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: none;
+    background: transparent;
+    color: var(--text-light);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Cinzel', serif;
+    min-width: 120px;
+}
+
+.map-tab.active {
+    background: var(--accent);
+    color: var(--primary-dark);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.map-container {
+    position: relative;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    overflow: hidden;
+    flex: 1;
+    background: #0a1f12;
+    width: 100%; /* Now uses full width */
+    height: 65vh; /* Set a percentage of viewport height */
+    min-height: 400px;
+    max-height: 800px;
+    margin-right: 0; /* Remove margin that made space for session panel */
+}
 .character-marker:hover::after {
     opacity: 1;
 }

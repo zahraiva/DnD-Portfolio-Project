@@ -168,11 +168,11 @@ main {
 
 /* Home Page / Hero */
 #home {
-    background: radial-gradient(circle at center, rgba(76, 175, 80, 0.1) 0%, transparent 70%);
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    margin-top: 250px;
 }
 
 .hero-content {

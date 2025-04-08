@@ -38,7 +38,6 @@ async def submit_action(
 
 @router.post("/continue-story/", response_model=StoryResponse)
 async def continue_story(game_session_id: str, db: AsyncSession = Depends(get_db)):
-    """Continues the story using OpenAI's ChatCompletion API based on character actions."""
     actions = await db.execute(
         select(CharacterAction)
         .options(
@@ -51,7 +50,7 @@ async def continue_story(game_session_id: str, db: AsyncSession = Depends(get_db
     if not actions:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No actions found for this session")
 
-    # Construct the prompt based on character actions
+
     prompt = "The story so far:\n"
     for action in actions:
         prompt += f"{action.game_character.character.name} performs the action: '{action.action}' (rolled {action.roll_value})\n"
@@ -62,22 +61,22 @@ async def continue_story(game_session_id: str, db: AsyncSession = Depends(get_db
     if not openai_api_key:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="OpenAI API key is missing")
 
-    # Initialize the OpenAI client
+
     client = Client(api_key=openai_api_key)
 
     try:
-        # Use client.chat.completions.create for the latest OpenAI library
+
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",  # Use a GPT-3.5 or GPT-4 model
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a Dungeon Master continuing a D&D adventure."},
                 {"role": "user", "content": prompt},
             ],
-            temperature=0.7,  # Adjust the creativity level
-            max_tokens=150,  # Adjust the token limit as needed
+            temperature=0.7,
+            max_tokens=150,
         )
-        # Correctly access the response content
-        ai_response = response.choices[0].message.content.strip()  # Access the content attribute directly
+
+        ai_response = response.choices[0].message.content.strip()
 
         await facades.update_game_session_state(db, game_session_id, ai_response)
 
