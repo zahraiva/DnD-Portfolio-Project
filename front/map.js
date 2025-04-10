@@ -1,56 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Map script loaded');
     
-    // Initialize everything
-    setupMapImages();
-    dynamicMapSizing();
-    centerAndSizeMap();
-    setupMapTabs();
-    attachButtonHandlers();
-    
-    // Make all character markers draggable
-    document.querySelectorAll('.character-marker.draggable').forEach(function(marker) {
-        makeMarkerDraggable(marker);
-    });
-    
-    // Directly attach button click handlers
-    function attachButtonHandlers() {
-        console.log('Attaching map button handlers');
+    // Reference elements
+    const mapTabs =     document.querySelectorAll('.map-tab');
+    const gameMaps = document.querySelectorAll('.game-map');
+    const addCharacterBtn = document.querySelector('.add-character-btn');
+    const resetMapBtn = document.querySelector('.reset-map-btn');
         
-        // Add Character button handler
-        const addCharacterBtn = document.querySelector('.add-character-btn');
-        if (addCharacterBtn) {
-            // Remove existing listeners
-            const newAddBtn = addCharacterBtn.cloneNode(true);
-            addCharacterBtn.parentNode.replaceChild(newAddBtn, addCharacterBtn);
+    // Make the map tabs work
+    mapTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            console.log(`Switching to map: ${tab.getAttribute('data-map')}`);
             
-            newAddBtn.onclick = function(e) {
-                e.preventDefault();
-                console.log('Add character button clicked');
-                showCharacterSelection();
-                return false;
-            };
-        }
-        
-        // Reset Map button handler
-        const resetMapBtn = document.querySelector('.reset-map-btn');
-        if (resetMapBtn) {
-            // Remove existing listeners
-            const newResetBtn = resetMapBtn.cloneNode(true);
-            resetMapBtn.parentNode.replaceChild(newResetBtn, resetMapBtn);
-            
-            newResetBtn.onclick = function(e) {
-                e.preventDefault();
-                console.log('Reset map button clicked');
-                resetMap();
-                return false;
-            };
-        }
-    }
-    
-    // Setup map images with simple handling
-    function setupMapImages() {
-        console.log('Setting up map images with basic centering');
+            // Update active tab
+            mapTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
         
         // Get all map images
         const mapImages = document.querySelectorAll('.map-base-img');
