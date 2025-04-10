@@ -299,6 +299,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
                 document.body.style.overflow = 'hidden';
             }
+            
+            // Initialize dice if needed
+            if (typeof initializeDice === 'function') {
+                setTimeout(initializeDice, 100);
+            }
         });
     }
     
@@ -314,8 +319,9 @@ document.addEventListener('DOMContentLoaded', function() {
             popup.className = 'character-marker-popup';
             popup.innerHTML = `
                 <h3>${characterName}</h3>
-                <p>${characterClass.charAt(0).toUpperCase() + characterClass.slice(1)}</p>
+                <p>${characterClass ? characterClass.charAt(0).toUpperCase() + characterClass.slice(1) : 'Character'}</p>
                 <button class="remove-marker-btn">Remove</button>
+                <button class="roll-for-marker-btn">Roll for character</button>
             `;
             
             // Position popup near the marker
@@ -342,6 +348,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
+            // Add roll button functionality
+            const rollBtn = popup.querySelector('.roll-for-marker-btn');
+            if (rollBtn && typeof window.rollDice === 'function') {
+                rollBtn.addEventListener('click', () => {
+                    window.rollDice();
+                    popup.classList.remove('show');
+                    setTimeout(() => {
+                        popup.remove();
+                    }, 300);
+                    
+                    // Highlight marker briefly
+                    marker.classList.add('highlight');
+                    setTimeout(() => {
+                        marker.classList.remove('highlight');
+                    }, 1500);
+                });
+            }
+            
             // Close popup when clicking elsewhere
             document.addEventListener('click', function closePopup(event) {
                 if (!popup.contains(event.target) && event.target !== marker) {
@@ -354,6 +378,21 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+    
+    // Initialize dice when the map page becomes active
+    if (typeof window.initializeDice === 'function') {
+        // Initial initialization
+        if (document.getElementById('map').classList.contains('active')) {
+            window.initializeDice();
+        }
+        
+        // Initialize when page changes to map
+        document.addEventListener('pageChanged', function(e) {
+            if (e.detail && e.detail.pageId === 'map') {
+                window.initializeDice();
+            }
+        });
+    }
 });
 
 // Helper function to show notification
@@ -362,7 +401,7 @@ function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.innerHTML = `
-        <i class="fas fa-${type === 'info' ? 'info-circle' : 'exclamation-circle'}"></i>
+        <i class="fas fa-${type === 'info' ? 'info-circle' : type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
         <span>${message}</span>
     `;
     
@@ -385,3 +424,19 @@ function showNotification(message, type = 'info') {
 
 // Make showNotification globally available
 window.showNotification = showNotification;
+
+// Dispatch custom event when page changes
+document.addEventListener('DOMContentLoaded', function() {
+    const originalShowPage = window.showPage;
+    if (originalShowPage) {
+        window.showPage = function(pageId, options = {}) {
+            originalShowPage(pageId, options);
+            
+            // Dispatch custom event
+            const event = new CustomEvent('pageChanged', {
+                detail: { pageId, options }
+            });
+            document.dispatchEvent(event);
+        };
+    }
+});

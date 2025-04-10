@@ -1,0 +1,260 @@
+.dice-container {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 80px;
+  height: 80px;
+  perspective: 1000px;
+  z-index: 100;
+  cursor: pointer;
+  user-select: none;
+}
+
+.dice {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 1.5s ease-out;
+}
+
+.dice-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 31, 18, 0.85);
+  border: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'MedievalSharp', cursive;
+  font-size: 1.8rem;
+  color: var(--accent);
+  text-shadow: 0 0 5px rgba(76, 175, 80, 0.7);
+  backface-visibility: visible;
+  transform-origin: center center;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
+/* Twenty faces of a d20 placed in 3D space */
+.dice-face:nth-child(1) { transform: rotateY(0deg) translateZ(40px); }
+.dice-face:nth-child(2) { transform: rotateY(72deg) translateZ(40px); }
+.dice-face:nth-child(3) { transform: rotateY(144deg) translateZ(40px); }
+.dice-face:nth-child(4) { transform: rotateY(216deg) translateZ(40px); }
+.dice-face:nth-child(5) { transform: rotateY(288deg) translateZ(40px); }
+.dice-face:nth-child(6) { transform: rotateX(63.435deg) rotateY(0deg) translateZ(40px); }
+.dice-face:nth-child(7) { transform: rotateX(63.435deg) rotateY(72deg) translateZ(40px); }
+.dice-face:nth-child(8) { transform: rotateX(63.435deg) rotateY(144deg) translateZ(40px); }
+.dice-face:nth-child(9) { transform: rotateX(63.435deg) rotateY(216deg) translateZ(40px); }
+.dice-face:nth-child(10) { transform: rotateX(63.435deg) rotateY(288deg) translateZ(40px); }
+.dice-face:nth-child(11) { transform: rotateX(116.565deg) rotateY(0deg) translateZ(40px); }
+.dice-face:nth-child(12) { transform: rotateX(116.565deg) rotateY(72deg) translateZ(40px); }
+.dice-face:nth-child(13) { transform: rotateX(116.565deg) rotateY(144deg) translateZ(40px); }
+.dice-face:nth-child(14) { transform: rotateX(116.565deg) rotateY(216deg) translateZ(40px); }
+.dice-face:nth-child(15) { transform: rotateX(116.565deg) rotateY(288deg) translateZ(40px); }
+.dice-face:nth-child(16) { transform: rotateX(180deg) rotateY(0deg) translateZ(40px); }
+.dice-face:nth-child(17) { transform: rotateX(180deg) rotateY(72deg) translateZ(40px); }
+.dice-face:nth-child(18) { transform: rotateX(180deg) rotateY(144deg) translateZ(40px); }
+.dice-face:nth-child(19) { transform: rotateX(180deg) rotateY(216deg) translateZ(40px); }
+.dice-face:nth-child(20) { transform: rotateX(180deg) rotateY(288deg) translateZ(40px); }
+
+.dice-rolling {
+  animation: diceRoll 2s;
+}
+
+@keyframes diceRoll {
+  0% {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  25% {
+    transform: rotateX(360deg) rotateY(180deg) rotateZ(90deg);
+  }
+  50% {
+    transform: rotateX(720deg) rotateY(360deg) rotateZ(180deg);
+  }
+  75% {
+    transform: rotateX(1080deg) rotateY(540deg) rotateZ(270deg);
+  }
+  100% {
+    transform: rotateX(1440deg) rotateY(720deg) rotateZ(360deg);
+  }
+}
+
+.dice-result {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(10, 31, 18, 0.95);
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  padding: 15px 30px;
+  font-family: 'MedievalSharp', cursive;
+  font-size: 2.5rem;
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(76, 175, 80, 0.7);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  z-index: 200;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.dice-result.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dice-result span {
+  font-size: 1rem;
+  display: block;
+  color: var(--text-light);
+  margin-top: 5px;
+}
+
+.dice-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background: rgba(10, 31, 18, 0.9);
+  color: var(--text-light);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  width: max-content;
+  max-width: 200px;
+  text-align: center;
+  border: 1px solid var(--accent);
+}
+
+.dice-container:hover .dice-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+.dice-history-btn {
+  position: absolute;
+  bottom: 20px;
+  left: 110px;
+  background: rgba(10, 31, 18, 0.85);
+  border: 1px solid var(--accent);
+  color: var(--text-light);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.dice-history-btn:hover {
+  background: rgba(122, 198, 125, 0.2);
+  transform: scale(1.1);
+}
+
+.dice-history-panel {
+  position: absolute;
+  bottom: 70px;
+  left: 20px;
+  background: rgba(10, 31, 18, 0.95);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 15px;
+  width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 150;
+  transform: translateY(20px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.dice-history-panel.show {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.dice-history-panel h4 {
+  color: var(--accent);
+  margin: 0 0 10px 0;
+  font-family: 'MedievalSharp', cursive;
+  text-align: center;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.dice-history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dice-history-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(76, 175, 80, 0.2);
+  font-size: 0.9rem;
+}
+
+.dice-history-item:last-child {
+  border-bottom: none;
+}
+
+.dice-history-item .roll-time {
+  color: rgba(232, 245, 233, 0.6);
+  font-size: 0.8rem;
+}
+
+.dice-history-item .roll-result {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.dice-critical {
+  animation: criticalPulse 2s infinite;
+}
+
+.dice-critical.success {
+  color: #72be99;
+  text-shadow: 0 0 10px rgba(76, 175, 80, 0.9);
+}
+
+.dice-critical.fail {
+  color: #e74c3c;
+  text-shadow: 0 0 10px rgba(231, 76, 60, 0.9);
+}
+
+@keyframes criticalPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .dice-container {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .dice-face {
+    font-size: 1.4rem;
+  }
+  
+  .dice-history-panel {
+    width: 180px;
+  }
+}
