@@ -25,7 +25,7 @@
                 <li><a href="#" data-page="map"><i class="fas fa-map-marked-alt"></i> Map</a></li>
                 <li><a href="#" data-page="characters"><i class="fas fa-users"></i> Characters</a></li>
             </ul>
-            <a href="index.html" class="login-btn"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="index.html" class="login-btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</a>
         </nav>
     </header>
 
@@ -658,5 +658,27 @@
     <script src="characters.js"></script>
     <script src="character-expansion.js"></script>
     <script src="button-fixer.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <script>
+        // Check login status and update login button
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginBtn = document.getElementById('loginBtn');
+            
+            if (isUserLoggedIn && isUserLoggedIn()) {
+                const currentUser = getCurrentUser();
+                loginBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> Logout `;
+                loginBtn.href = "#";
+                loginBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    logoutUser();
+                    window.location.reload();
+                });
+            } else {
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+                loginBtn.href = "index.html";
+            }
+        });
+    </script>
 </body>
 </html>

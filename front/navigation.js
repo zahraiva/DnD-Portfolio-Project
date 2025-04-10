@@ -387,4 +387,48 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    // Update login/logout button based on authentication status
+    updateLoginButton();
+    
+    // If there's a URL hash, navigate to that section
+    if (window.location.hash) {
+        const targetPage = window.location.hash.substring(1);
+        const targetLink = document.querySelector(`.nav-links a[data-page="${targetPage}"]`);
+        if (targetLink) {
+            targetLink.click();
+        }
+    }
 });
+
+// Function to update login button based on authentication status
+function updateLoginButton() {
+    const loginBtn = document.getElementById('loginBtn');
+    if (!loginBtn) return;
+    
+    // Check if the auth functions are available
+    if (typeof isUserLoggedIn === 'function' && typeof getCurrentUser === 'function' && 
+        typeof logoutUser === 'function') {
+        
+        if (isUserLoggedIn()) {
+            const currentUser = getCurrentUser();
+            loginBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> Logout (${currentUser.username})`;
+            loginBtn.href = "#";
+            
+            // Remove any existing click event listeners
+            const newLoginBtn = loginBtn.cloneNode(true);
+            loginBtn.parentNode.replaceChild(newLoginBtn, loginBtn);
+            
+            // Add logout functionality
+            newLoginBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                logoutUser();
+                console.log("User logged out, reloading page");
+                window.location.reload();
+            });
+        } else {
+            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+            loginBtn.href = "index.html";
+        }
+    }
+}

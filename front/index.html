@@ -14,18 +14,19 @@
         <div class="form-container">
             <div class="form-box">
                 <!-- Login Form -->
-                <form class="login-form">
+                <form class="login-form" id="loginForm">
                     <h2>Welcome Back, Adventurer!</h2>
                     <div class="input-group">
-                        <input type="text" required>
+                        <input type="text" id="loginUsername" required>
                         <label>Username</label>
                         <div class="input-icon">🛡️</div>
                     </div>
                     <div class="input-group">
-                        <input type="password" required>
+                        <input type="password" id="loginPassword" required>
                         <label>Password</label>
                         <div class="input-icon">🗝️</div>
                     </div>
+                    <div class="login-message" id="loginMessage"></div>
                     <button type="submit" class="submit-btn">Log in</button>
                     <p class="toggle-text">Don't have an account? <span class="toggle-btn">Sign Up</span></p>
                 </form>
@@ -55,11 +56,47 @@
         </div>
     </div>
 
+    <!-- Add our authentication script -->
+    <script src="js/auth.js"></script>
     <script>
         document.querySelectorAll('.toggle-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelector('.form-box').classList.toggle('show-signup');
             });
+        });
+
+        // Check if user is already logged in
+        if (isUserLoggedIn()) {
+            console.log("User already logged in, redirecting to landing.html");
+            window.location.href = "landing.html"; // Redirect to landing if already logged in
+        }
+
+        // Handle login form submission
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById("loginUsername").value;
+            const password = document.getElementById("loginPassword").value;
+            const messageElement = document.getElementById("loginMessage");
+            
+            console.log("Attempting login with:", username);
+            
+            if (authenticateUser(username, password)) {
+                messageElement.textContent = "Login successful! Redirecting...";
+                messageElement.style.color = "green";
+                
+                console.log("Authentication successful, will redirect to landing.html");
+                
+                // Redirect after a short delay
+                setTimeout(() => {
+                    console.log("Redirecting now...");
+                    window.location.replace("landing.html");
+                }, 1500);
+            } else {
+                messageElement.textContent = "Invalid username or password!";
+                messageElement.style.color = "red";
+                console.log("Authentication failed");
+            }
         });
     </script>
 </body>
