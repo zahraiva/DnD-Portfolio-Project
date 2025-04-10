@@ -1,0 +1,355 @@
+/* Character Selection Modal Styles */
+.character-selection-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 2000;
+    overflow: auto;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.character-selection-modal.show {
+    opacity: 1;
+    display: flex !important; /* Force display when shown */
+}
+
+.character-selection-content {
+    background: rgba(10, 31, 18, 0.95);
+    width: 90%;
+    max-width: 900px; /* Wider to show more characters */
+    border-radius: 10px;
+    padding: 2rem;
+    position: relative;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.character-selection-content h2 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-family: 'MedievalSharp', cursive;
+    color: var(--accent);
+    font-size: 2rem;
+}
+
+/* Tabs for character types */
+.selection-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.selection-tab {
+    background: rgba(122, 198, 125, 0.1);
+    border: 1px solid rgba(122, 198, 125, 0.3);
+    color: var(--text-light);
+    padding: 0.8rem 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.selection-tab.active {
+    background: rgba(122, 198, 125, 0.3);
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.selection-tab i {
+    font-size: 1.1rem;
+}
+
+/* Character options panels */
+.selection-panels {
+    margin-bottom: 1.5rem;
+    max-height: 55vh;
+    overflow-y: auto;
+    padding-right: 5px;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.selection-panel {
+    display: none;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.selection-panel.active {
+    display: grid;
+}
+
+/* Character option card */
+.character-option {
+    background: rgba(10, 31, 18, 0.7);
+    border: 1px solid rgba(122, 198, 125, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    align-items: center;
+    position: relative;
+}
+
+.character-option:hover {
+    background: rgba(26, 51, 32, 0.9);
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.character-option.selected {
+    background: rgba(122, 198, 125, 0.15);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(122, 198, 125, 0.3);
+}
+
+.character-option-portrait {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--accent);
+    flex-shrink: 0;
+}
+
+.character-option-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.character-option-info {
+    flex: 1;
+}
+
+.character-option-info h4 {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+.character-option-info p {
+    margin: 0;
+    color: var(--accent);
+    font-size: 0.85rem;
+}
+
+/* Action buttons */
+.character-option-action {
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+}
+
+.add-to-map-btn {
+    background: rgba(122, 198, 125, 0.15);
+    color: var(--text-light);
+    border: 1px solid var(--accent);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+}
+
+.add-to-map-btn:hover {
+    background: rgba(122, 198, 125, 0.3);
+    transform: scale(1.1);
+}
+
+.add-to-map-btn.added {
+    background: var(--accent);
+    color: var(--primary-dark);
+    transform: scale(1.2);
+}
+
+/* Cancel button */
+.close-selection-btn {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+    padding: 0.8rem;
+    background: rgba(255, 87, 34, 0.2);
+    color: #ff5722;
+    border: 1px solid rgba(255, 87, 34, 0.5);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    text-align: center;
+}
+
+.close-selection-btn:hover {
+    background: rgba(255, 87, 34, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Scrollbar styling */
+.selection-panels::-webkit-scrollbar {
+    width: 8px;
+}
+
+.selection-panels::-webkit-scrollbar-track {
+    background: rgba(10, 31, 18, 0.5);
+    border-radius: 10px;
+}
+
+.selection-panels::-webkit-scrollbar-thumb {
+    background-color: var(--accent);
+    border-radius: 10px;
+}
+
+/* Enhanced character markers for the map */
+.character-marker {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-dark);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5), 0 0 0 2px white;
+    cursor: move;
+    pointer-events: all !important;
+    z-index: 100;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Character markers with portraits */
+.character-marker.with-portrait {
+    color: white;
+    overflow: hidden;
+}
+
+.character-marker.with-portrait::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4); /* Dark overlay for better icon visibility */
+    z-index: 1;
+}
+
+.character-marker-icon {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Character marker popup */
+.character-marker-popup {
+    position: fixed;
+    background: rgba(10, 31, 18, 0.95);
+    border: 1px solid var(--accent);
+    border-radius: 5px;
+    padding: 10px 15px;
+    width: 150px;
+    transform: translate(-50%, -100%);
+    margin-top: -10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 2000;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.character-marker-popup::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid var(--accent);
+}
+
+.character-marker-popup.show {
+    opacity: 1;
+    pointer-events: all;
+    transform: translate(-50%, -110%);
+}
+
+.character-marker-popup h3 {
+    margin: 0;
+    color: var(--accent);
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.character-marker-popup p {
+    margin: 0 0 10px 0;
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.remove-marker-btn {
+    background: rgba(255, 87, 34, 0.2);
+    color: #ff5722;
+    border: 1px solid rgba(255, 87, 34, 0.5);
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.remove-marker-btn:hover {
+    background: rgba(255, 87, 34, 0.4);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .selection-panel {
+        grid-template-columns: 1fr;
+    }
+    
+    .character-option {
+        padding: 0.8rem;
+    }
+    
+    .character-option-portrait {
+        width: 50px;
+        height: 50px;
+    }
+}
