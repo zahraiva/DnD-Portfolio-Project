@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 charactersHtml += `
                 <div class="character-option" data-id="${character.id}" data-name="${character.name}" data-class="${character.class}" data-color="${character.color}">
                     <div class="character-option-portrait" style="border-color: ${character.color}">
-                        <img src="${character.image}" alt="${character.name}">
+                        <img src="${character.image}" alt="${character.name}" onerror="this.src='images/placeholder.png'">
                     </div>
                     <div class="character-option-info">
                         <h4>${character.name}</h4>
@@ -389,6 +389,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Make generate content function globally available
     window.generateCharacterSelectionContent = generateCharacterSelectionContent;
     
+    // Expose character data globally for debugging
+    window.getCharacterData = function() {
+        return charactersByClass;
+    };
+    
     // Initialize when document is ready
     createCharacterSelectionModal();
     
@@ -397,5 +402,34 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.closest('.add-character-btn')) {
             window.showCharacterSelection();
         }
+    });
+    
+    // Add direct handler for the Add Character button that's more reliable
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            const addCharBtn = document.querySelector('.add-character-btn');
+            if (addCharBtn) {
+                addCharBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log("Add character direct handler triggered");
+                    
+                    // Ensure modal exists
+                    createCharacterSelectionModal();
+                    
+                    // Force refresh content
+                    generateCharacterSelectionContent();
+                    
+                    // Show modal with delay
+                    setTimeout(function() {
+                        const modal = document.getElementById('characterSelectionModal');
+                        if (modal) {
+                            modal.style.display = 'flex';
+                            setTimeout(() => modal.classList.add('show'), 10);
+                        }
+                    }, 50);
+                }, { capture: true });
+            }
+        }, 1000); // Delay to ensure DOM is ready
     });
 });
