@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctaButton = document.querySelector('.cta-button[data-target]');
     
     // Function to show a specific page
-    function showPage(pageId) {
-        console.log(`Showing page: ${pageId}`);
+    function showPage(pageId, options = {}) {
+        console.log(`Showing page: ${pageId}`, options);
         
         // Hide all pages
         pages.forEach(page => {
@@ -34,7 +34,48 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const event = new Event('resize');
                 window.dispatchEvent(event);
+                
+                // If a specific map is specified, select it
+                if (options && options.mapId) {
+                    selectMapTab(options.mapId);
+                }
             }, 100);
+        }
+        
+        // Dispatch custom event for page change
+        const pageChangeEvent = new CustomEvent('pageChanged', {
+            detail: { pageId, options }
+        });
+        document.dispatchEvent(pageChangeEvent);
+    }
+    
+    // Helper function to select a specific map tab
+    function selectMapTab(mapId) {
+        if (!mapId) return;
+        
+        const mapTab = document.querySelector(`.map-tab[data-map="${mapId}"]`);
+        if (mapTab) {
+            console.log(`Selecting map tab: ${mapId}`);
+            
+            // Simulate a click on the map tab
+            mapTab.click();
+            
+            // Additional handling to ensure the map is actually shown
+            setTimeout(() => {
+                // Hide all maps
+                document.querySelectorAll('.game-map').forEach(map => {
+                    map.classList.remove('active');
+                });
+                
+                // Show the selected map
+                const targetMap = document.getElementById(`${mapId}-map`);
+                if (targetMap) {
+                    targetMap.classList.add('active');
+                    console.log(`Map activated: ${mapId}`);
+                }
+            }, 200);
+        } else {
+            console.warn(`Map tab not found for: ${mapId}`);
         }
     }
     
@@ -67,19 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Get target map
             const mapId = btn.getAttribute('data-map');
             
-            // Switch to map page
-            showPage('map');
-            
-            // Select the appropriate map tab
-            setTimeout(() => {
-                const mapTab = document.querySelector(`.map-tab[data-map="${mapId}"]`);
-                if (mapTab) {
-                    mapTab.click();
-                }
-                
-                // Resize the map
-                window.dispatchEvent(new Event('resize'));
-            }, 200);
+            // Switch to map page with specific map
+            showPage('map', { mapId: mapId });
             
             // Close modal if we're in one
             const modal = btn.closest('.modal');
@@ -399,6 +429,9 @@ document.addEventListener('DOMContentLoaded', () => {
             targetLink.click();
         }
     }
+    
+    // Expose the selectMapTab function globally
+    window.selectMapTab = selectMapTab;
 });
 
 // Function to update login button based on authentication status

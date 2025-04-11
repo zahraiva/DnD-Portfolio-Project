@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="map-container-fix.css">
     <link rel="stylesheet" href="character-selection.css">
     <link rel="stylesheet" href="dice.css">
+    <link rel="stylesheet" href="css/modal-fix.css">
 </head>
 <body>
 
@@ -553,10 +554,10 @@
                             <input type="text" name="characterName" placeholder="Character Name">
                             <select name="characterClass" class="character-class">
                                 <option value="">Select Class</option>
-                                <option value="warrior">Warrior</option>
-                                <option value="mage">Mage</option>
-                                <option value="rogue">Rogue</option>
-                                <option value="cleric">Cleric</option>
+                                <option value="warrior">Mage</option>on>
+                                <option value="mage">Warrior</option>on>
+                                <option value="rogue">Scoundrels</option>
+                                <option value="cleric">Healers</option>
                             </select>
                             <div class="character-buttons">
                                 <button type="button" class="add-details-btn">Add Skills</button>
@@ -665,6 +666,8 @@
     <script src="js/auth.js"></script>
     <script src="fix-add-character.js"></script>
     <script src="fix-character-icons.js"></script>
+    <script src="js/make-markers-draggable.js"></script>
+    <script src="js/modal-buttons-fix.js"></script>
     <script>
         // Check login status and update login button
         document.addEventListener('DOMContentLoaded', function() {

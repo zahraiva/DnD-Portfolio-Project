@@ -1,0 +1,214 @@
+/* Fix for modal display issues */
+
+/* Ensure modals display properly */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+}
+
+.modal-content {
+    position: relative;
+    background-color: var(--primary-dark);
+    color: var(--text-light);
+    margin: 5% auto;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    max-height: 85vh; /* Set maximum height */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Ensure close button is visible */
+.close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.close:hover,
+.close:focus {
+    color: var(--accent);
+}
+
+/* Fix character-buttons layout */
+.character-buttons {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin: 8px 0 !important;
+}
+
+/* Fix for skills and items badges */
+.skills-status, .items-status {
+    display: inline-flex;
+    align-items: center;
+    margin: 5px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.skills-status {
+    background: rgba(122, 198, 125, 0.2);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+}
+
+.items-status {
+    background: rgba(82, 121, 177, 0.2);
+    border: 1px solid #5279b1;
+    color: #5279b1;
+}
+
+.skills-status i, .items-status i {
+    margin-right: 5px;
+}
+
+.skills-status:hover, .items-status:hover {
+    transform: translateY(-2px);
+}
+
+/* Make sure character entry layout works */
+.character-entry {
+    position: relative;
+    padding: 20px;
+    margin-bottom: 15px;
+    background: rgba(10, 31, 18, 0.7);
+    border-radius: 5px;
+    border-left: 3px solid var(--accent);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.character-entry input,
+.character-entry select {
+    flex: 1;
+    min-width: 160px;
+    margin: 5px;
+    padding: 12px;
+}
+
+/* Fix overlap issues with delete button */
+.delete-character-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 5;
+    background: rgba(255, 0, 0, 0.1) !important;
+    color: rgba(255, 0, 0, 0.6) !important;
+    border: 1px solid rgba(255, 0, 0, 0.2) !important;
+    width: 24px !important;
+    height: 24px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    font-size: 0.8rem !important;
+    pointer-events: auto !important;
+    z-index: 10 !important;
+}
+
+.delete-character-btn:hover {
+    background: rgba(255, 0, 0, 0.3) !important;
+    color: #ff4444 !important;
+    transform: rotate(90deg) !important;
+}
+
+/* Ensure modal buttons work */
+.submit-btn {
+    background: var(--accent);
+    color: var(--primary-dark);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+}
+
+/* Ensure buttons in character entry work */
+.add-details-btn, .add-items-btn {
+    padding: 10px 15px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    background: rgba(122, 198, 125, 0.15) !important;
+    color: var(--text-light) !important;
+    border: 1px solid var(--accent) !important;
+    font-size: 0.95rem !important;
+    display: inline-block !important;
+    text-align: center !important;
+    flex: 1 !important;
+    pointer-events: auto !important; /* Force pointer events */
+    position: relative !important;
+    z-index: 5 !important;
+}
+
+.add-items-btn {
+    background: rgba(82, 121, 177, 0.15) !important;
+    border-color: #5279b1 !important;
+}
+
+.add-details-btn:hover, .add-items-btn:hover {
+    transform: translateY(-2px) !important;
+    background: rgba(122, 198, 125, 0.3) !important;
+}
+
+.add-items-btn:hover {
+    background: rgba(82, 121, 177, 0.3) !important;
+}
+
+/* Fix for Add Character button */
+#addCharacterBtn {
+    display: block !important;
+    width: 100% !important;
+    margin-top: 15px !important;
+    padding: 12px !important;
+    text-align: center !important;
+    background: rgba(122, 198, 125, 0.15) !important;
+    color: var(--text-light) !important;
+    border: 2px dashed var(--accent) !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-weight: bold !important;
+    pointer-events: auto !important; /* Force pointer events */
+}
+
+#addCharacterBtn:hover {
+    background: rgba(122, 198, 125, 0.25) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Fix modal z-index to ensure it appears above everything */
+#characterDetailsModal, #characterItemsModal {
+    z-index: 9999 !important;
+}
